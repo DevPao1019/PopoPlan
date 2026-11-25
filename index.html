@@ -1,4 +1,25 @@
-<!-- LIFE ARCHITECT — embeddable dashboard. Paste into a Custom HTML / embed block. Everything is scoped to .la-widget. -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Life Architect: habits, training, body data and planning in one place.">
+<meta name="theme-color" content="#0B0B0C">
+<title>Life Architect</title>
+<style>html,body{margin:0;background:#FBFBFC}.la-widget{border-radius:0!important;border:0!important;min-height:100vh}</style>
+<!-- ACCOUNTS: paste your Supabase Project URL and PUBLISHABLE key between the quotes, then commit.
+     Find both in Supabase: Project Settings > API Keys. Never paste a secret key here. -->
+<script>
+window.LA_CONFIG={
+  supabaseUrl:'',
+  supabaseKey:''
+};
+</script>
+</head>
+<body>
+<!-- LIFE ARCHITECT. Everything is scoped to .la-widget. Accounts and sync switch on when the page defines
+     window.LA_CONFIG={supabaseUrl:'https://YOUR-PROJECT.supabase.co',supabaseKey:'sb_publishable_...'} before this block.
+     Use the publishable key only. Never put a secret key in a web page. -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600&display=swap" rel="stylesheet">
 <div class="la-widget" data-theme="light">
 <style>
@@ -715,6 +736,72 @@
 }
 @media(max-width:560px){.la-widget .kpis{gap:12px}.la-widget .kpi{padding:16px;border-radius:20px}.la-widget .kpi b{font-size:24px;margin-top:16px}.la-widget .kpi .k-l{font-size:13px}.la-widget .kpi small{font-size:11.5px}.la-widget .chip-ico{width:36px;height:36px;border-radius:11px}.la-widget .trend{top:16px;right:16px;font-size:12px}.la-widget .panel,.la-widget .card{padding:20px}}
 @media(prefers-reduced-motion:reduce){.la-widget *{transition:none!important;animation:none!important}.la-widget .draw{stroke-dashoffset:0}}
+/* ===== sign-in gate ===== */
+.la-widget .auth{position:fixed;inset:0;z-index:3000;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);background:var(--bg);overflow:auto;-webkit-overflow-scrolling:touch}
+.la-widget .auth[hidden]{display:none}
+.la-widget .auth-side{background:#0B0B0C;color:#FAFAFA;padding:44px 52px;display:flex;flex-direction:column;justify-content:space-between;gap:36px;position:relative;overflow:hidden;border-right:1px solid rgba(255,255,255,.08)}
+.la-widget .auth-side:before{content:"";position:absolute;inset:0;background:radial-gradient(60% 50% at 85% 0%,rgba(255,255,255,.11),transparent 70%),radial-gradient(50% 40% at 0% 100%,rgba(255,255,255,.06),transparent 70%);pointer-events:none}
+.la-widget .auth-side>*{position:relative}
+.la-widget .auth-brand{display:flex;align-items:center;gap:10px;font:600 16px var(--sans);letter-spacing:-.01em}
+.la-widget .auth-logo{width:34px;height:34px;border-radius:10px;background:#FAFAFA;color:#0B0B0C;display:grid;place-items:center}
+.la-widget .auth-logo svg{width:18px;height:18px}
+.la-widget .auth-side h1{font:700 clamp(30px,3.4vw,44px)/1.08 var(--sans);letter-spacing:-.035em;max-width:13ch;text-wrap:balance;color:#FAFAFA}
+.la-widget .auth-side .lead{font-size:15.5px;line-height:1.55;color:rgba(250,250,250,.68);max-width:40ch;margin-top:16px}
+.la-widget .auth-pts{list-style:none;display:flex;flex-direction:column;gap:14px;margin-top:32px}
+.la-widget .auth-pts li{display:flex;gap:12px;align-items:flex-start;font-size:14px;line-height:1.45;color:rgba(250,250,250,.86);max-width:42ch}
+.la-widget .auth-pts svg{flex:none;width:18px;height:18px;margin-top:1px;color:#FAFAFA}
+.la-widget .auth-foot{font-size:12.5px;color:rgba(250,250,250,.5)}
+.la-widget .auth-main{display:grid;place-items:center;padding:32px 20px;position:relative}
+.la-widget .auth-card{width:min(400px,100%);display:flex;flex-direction:column;gap:16px}
+.la-widget .auth-card h2{font:700 28px/1.15 var(--sans);letter-spacing:-.03em}
+.la-widget .auth-card .sub{font-size:14.5px;color:var(--text-secondary);margin-top:-8px;line-height:1.5;overflow-wrap:anywhere}
+.la-widget .auth-card form{display:flex;flex-direction:column;gap:14px}
+.la-widget .auth-card input:not([type=checkbox]){height:46px;font-size:15px}
+.la-widget .auth-card .btn,.la-widget .auth-card .ghost{height:46px;width:100%}
+.la-widget .auth .pw{position:relative}
+.la-widget .auth .pw input{padding-right:64px}
+.la-widget .auth .pw button{position:absolute;right:6px;top:6px;height:34px;padding:0 10px;border:0;border-radius:8px;background:none;font:600 12.5px var(--sans);color:var(--text-secondary);cursor:pointer}
+.la-widget .auth .pw button:hover{background:var(--surface-raised);color:var(--text-primary)}
+.la-widget .auth-meter{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-secondary)}
+.la-widget .auth-meter i{flex:1;height:4px;border-radius:2px;background:var(--border-strong)}
+.la-widget .auth-meter[data-s="1"] i:nth-child(1){background:var(--negative)}
+.la-widget .auth-meter[data-s="2"] i:nth-child(-n+2){background:#D97706}
+.la-widget .auth-meter[data-s="3"] i{background:var(--positive)}
+.la-widget .auth-meter span{flex:none;min-width:150px;text-align:right}
+.la-widget .auth-alert{padding:11px 13px;border-radius:12px;font-size:13.5px;line-height:1.45;background:#FEF2F2;color:#B91C1C;border:1px solid #FECACA}
+.la-widget .auth-alert.info{background:var(--surface-raised);color:var(--text-secondary);border-color:var(--border-subtle)}
+.la-widget[data-theme=dark] .auth-alert:not(.info){background:rgba(220,38,38,.12);color:#FCA5A5;border-color:rgba(220,38,38,.35)}
+.la-widget .auth-row{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;font-size:13.5px;color:var(--text-secondary)}
+.la-widget .auth-row .linkb{font-size:13.5px}
+.la-widget .auth-or{display:flex;align-items:center;gap:12px;font-size:12.5px;color:var(--text-tertiary)}
+.la-widget .auth-or:before,.la-widget .auth-or:after{content:"";flex:1;height:1px;background:var(--border-subtle)}
+.la-widget .auth-fine{font-size:12.5px;color:var(--text-tertiary);text-align:center;margin-top:-6px}
+.la-widget .auth-x{position:absolute;top:20px;right:20px}
+.la-widget .auth-spin{width:28px;height:28px;border-radius:50%;border:3px solid var(--border-strong);border-top-color:var(--accent);animation:laSpin .8s linear infinite}
+@keyframes laSpin{to{transform:rotate(360deg)}}
+.la-widget .btn.load{opacity:.7;pointer-events:none}
+.la-widget .btn:disabled,.la-widget .ghost:disabled,.la-widget .linkb:disabled{opacity:.5;cursor:not-allowed}
+.la-widget .auth-stack{display:flex;flex-direction:column;gap:10px}
+.la-widget .auth-stack[hidden],.la-widget .auth-or[hidden],.la-widget .auth-row[hidden],.la-widget .auth-meter[hidden]{display:none}
+@media(max-width:860px){.la-widget .auth{grid-template-columns:minmax(0,1fr);grid-template-rows:auto 1fr}
+  .la-widget .auth-side{padding:20px;gap:0;border-right:0}.la-widget .auth-side .auth-mid,.la-widget .auth-foot{display:none}
+  .la-widget .auth-main{place-items:start center;padding:28px 20px 40px}}
+@media(prefers-reduced-motion:reduce){.la-widget .auth-spin{animation-duration:2.4s}}
+/* ===== account ===== */
+.la-widget .acct{display:flex;align-items:center;gap:12px;min-width:0}
+.la-widget .acct>div{min-width:0}
+.la-widget .acct b{display:block;font:600 14px var(--sans);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.la-widget .acct .ava{margin-left:0}
+.la-widget .who .ava{position:relative}
+.la-widget[data-sync] .who .ava:after{content:"";position:absolute;right:-1px;bottom:-1px;width:11px;height:11px;border-radius:50%;border:2px solid var(--rail);background:var(--text-tertiary)}
+.la-widget[data-sync=ok] .who .ava:after{background:var(--positive)}
+.la-widget[data-sync=pend] .who .ava:after{background:#D97706}
+.la-widget[data-sync=err] .who .ava:after{background:var(--negative)}
+.la-widget .acc-toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:3100;background:var(--text-primary);color:var(--bg);font:500 13.5px var(--sans);padding:10px 16px;border-radius:999px;box-shadow:0 12px 30px -12px rgba(0,0,0,.4);max-width:calc(100vw - 32px)}
+.la-widget .acc-toast[hidden]{display:none}
+@media(min-width:901px){.la-widget .row-3.two{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.la-widget .acct .note{display:block}
+.la-widget #pf-msg:not(:empty){color:var(--negative)}
 </style>
 
 <div class="rail-col"><nav class="rail" id="rail" aria-label="Life Architect">
@@ -729,19 +816,19 @@
   <div class="rail-foot">
     <button class="rail-btn" id="gd-open" type="button" aria-label="Guide" aria-haspopup="dialog" title="Take the tour"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.6 9.3a2.5 2.5 0 0 1 4.8.9c0 1.7-2.4 2.2-2.4 3.6"/><circle cx="12" cy="17" r=".6" fill="currentColor"/></svg></span></button>
     <button class="rail-btn" id="set-open" type="button" aria-label="Settings" aria-haspopup="dialog" aria-expanded="false" aria-controls="v-set" title="Settings"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span><span class="lbl">Settings</span></button>
-    <div class="who"><span class="ava" id="ava" aria-hidden="true">P</span><span class="lbl"><b id="who-n">Popo</b><small id="who-r">Year 2 Medical Student</small></span></div>
+    <div class="who"><span class="ava" id="ava" aria-hidden="true">·</span><span class="lbl"><b id="who-n">You</b><small id="who-r"></small></span></div>
   </div>
 </nav></div>
 
 <main class="main">
 
 <div id="v-overview" style="display:flex">
-  <div class="hello"><h1><span id="greet">Hello</span>, <span id="ttl">Popo</span></h1>
+  <div class="hello"><h1><span id="greet">Hello</span>, <span id="ttl">there</span></h1>
     <p><span id="t-date">Today</span> · <span id="t-train">–</span> · <span id="t-block">–</span></p></div>
   <div class="nudge" id="bk-nudge" role="status" hidden><span id="bk-nudge-t"></span><div class="btns"><button type="button" class="btn" id="bk-now">Back up now</button><button type="button" class="ghost" id="bk-later">Later</button></div></div>
   <div class="kpis">
     <div class="kpi"><span class="chip-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.6" fill="currentColor"/></svg></span>
-      <b id="t-exam">–</b><span class="k-l">Next exam</span><small id="t-exname">–</small></div>
+      <b id="t-exam">–</b><span class="k-l" id="t-exlbl">Next exam</span><small id="t-exname">–</small></div>
     <div class="kpi"><span class="chip-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span class="trend" id="ov-trend">–</span>
       <b id="t-daily">0%</b><span class="k-l">Today's checklist</span><div class="meter" aria-hidden="true"><i id="t-meter"></i></div><small id="t-dsub">–</small></div>
     <div class="kpi"><span class="chip-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg></span>
@@ -750,16 +837,16 @@
       <b id="ov-streak">0</b><span class="k-l">Day streak</span><small id="ov-sk-note">Days at 60% or more</small></div>
   </div>
   <div class="row-2b">
-    <section class="panel"><div class="ph"><div><h3 class="pt">Today's classes</h3><p class="sub">From the Year 2 calendar</p></div><button class="ghost" id="ov-open-cal" type="button">Open calendar</button></div><div id="ov-today"></div></section>
-    <section class="panel"><div class="ph"><div><h3 class="pt">Upcoming exams</h3><p class="sub">The next four</p></div></div><div id="ov-exams"></div></section>
+    <section class="panel"><div class="ph"><div><h3 class="pt" id="ov-today-h">Today's classes</h3><p class="sub" id="ov-today-s">From the Year 2 calendar</p></div><button class="ghost" id="ov-open-cal" type="button">Open calendar</button></div><div id="ov-today"></div></section>
+    <section class="panel"><div class="ph"><div><h3 class="pt" id="ov-ex-h">Upcoming exams</h3><p class="sub" id="ov-ex-s">The next four</p></div></div><div id="ov-exams"></div></section>
   </div>
   <div class="row-2">
     <section class="panel"><div class="ph"><div><h3 class="pt">Last 7 days</h3><p class="sub">How much of the checklist got done each day</p></div></div><div class="chart" id="ov-week"></div></section>
     <section class="panel"><div class="ph"><div><h3 class="pt">Workouts this week</h3><p class="sub">Aiming for 3: Push, Pull, Legs</p></div></div><div id="ov-goal"></div></section>
   </div>
-  <div class="row-3">
+  <div class="row-3" id="ov-row3">
     <section class="panel"><div class="ph"><div><h3 class="pt">Today's checklist</h3><p class="sub" id="ov-ck-sub">–</p></div></div><div id="ov-ck"></div></section>
-    <section class="panel"><div class="ph"><div><h3 class="pt" id="ov-subj-h">Lectures</h3><p class="sub">Topics checked off per subject</p></div></div><div id="ov-subj"></div><p class="note" style="margin-top:14px">Done so far: <b id="p-prog">–</b><span id="p-exam" hidden></span></p></section>
+    <section class="panel" id="ov-subj-sec"><div class="ph"><div><h3 class="pt" id="ov-subj-h">Lectures</h3><p class="sub">Topics checked off per subject</p></div></div><div id="ov-subj"></div><p class="note" style="margin-top:14px">Done so far: <b id="p-prog">–</b><span id="p-exam" hidden></span></p></section>
     <section class="panel"><div class="ph"><div><h3 class="pt">Last 30 days</h3><p class="sub">Days by how much of the checklist got done</p></div></div><div id="ov-dist"></div></section>
   </div>
   <section class="panel" id="ov-body-sec" hidden><div class="ph"><div><h3 class="pt" id="ov-body-h">Body</h3><p class="sub" id="ov-body-sub">From your InBody scans</p></div><div class="btns"><div class="seg3" id="ov-bm" role="group" aria-label="Body metric"><button type="button" data-m="smm" aria-pressed="true">Muscle</button><button type="button" data-m="w" aria-pressed="false">Weight</button><button type="button" data-m="pbf" aria-pressed="false">Fat %</button></div><button class="ghost" id="ov-body-imp" type="button">Import scan</button></div></div><div class="chart" id="ov-body"></div></section>
@@ -771,9 +858,9 @@
 <section class="panel" aria-labelledby="h-met">
   <div class="ph"><div><h3 class="pt" id="h-met">Calories and macros</h3><p class="sub" id="met-goal">Mifflin-St Jeor. Change a value, then press Calculate.</p></div><div class="btns"><button type="button" class="ghost" data-pf-open="1">Edit profile</button></div></div>
   <div class="form">
-    <label class="f">Age<input type="number" id="a" value="19.5" step="0.1" inputmode="decimal"></label>
-    <label class="f">Height (cm)<input type="number" id="h" value="165" inputmode="decimal"></label>
-    <label class="f">Weight (kg)<input type="number" id="w" value="55.5" step="0.1" inputmode="decimal"></label>
+    <label class="f">Age<input type="number" id="a" step="0.1" inputmode="decimal" placeholder="–"></label>
+    <label class="f">Height (cm)<input type="number" id="h" inputmode="decimal" placeholder="–"></label>
+    <label class="f">Weight (kg)<input type="number" id="w" step="0.1" inputmode="decimal" placeholder="–"></label>
     <label class="f">Sex<select id="g"><option value="F">Female</option><option value="M">Male</option></select></label>
     <label class="f">Activity<select id="act"><option value="1.2">Sedentary</option><option value="1.375" selected>Light · 3 d/wk</option><option value="1.55">Moderate · 4–5</option><option value="1.725">Heavy · 6</option></select></label>
     <button class="btn" id="go" type="button">Calculate</button>
@@ -858,19 +945,19 @@
 <div class="scrim" id="pf-scrim" hidden></div>
 <div class="bk-dlg pf-dlg" id="pf-dlg" role="dialog" aria-modal="true" aria-labelledby="pf-ttl" hidden>
   <h3 id="pf-ttl">Set up your profile</h3>
-  <p class="note" style="margin:-8px 0 16px">This sets your calories, protein and water targets. It stays in this browser. You can change it any time.</p>
+  <p class="note" id="pf-note" style="margin:-8px 0 16px">This sets your calories, protein and water targets. You can change it any time.</p>
   <form id="pf-form" novalidate>
     <div class="pf-g">
-      <label class="f">Name<input type="text" id="pf-name" maxlength="28" autocomplete="given-name" placeholder="What should it call you?"></label>
-      <label class="f">What you do<input type="text" id="pf-role" maxlength="40" placeholder="e.g. Year 2 Medical Student"></label>
-      <label class="f">Sex<select id="pf-sex"><option value="F">Female</option><option value="M">Male</option></select><small class="note">Used by the calorie formula.</small></label>
+      <label class="f">Name<input type="text" id="pf-name" maxlength="28" autocomplete="given-name" placeholder="First name"></label>
+      <label class="f">What you do<input type="text" id="pf-role" maxlength="40" placeholder="e.g. Student"></label>
+      <label class="f">Sex<select id="pf-sex"><option value="" disabled>Select</option><option value="F">Female</option><option value="M">Male</option></select><small class="note">Used by the calorie formula.</small></label>
       <label class="f">Birth date<input type="date" id="pf-dob"><small class="note">Keeps your age current.</small></label>
       <label class="f">Height (cm)<input type="number" id="pf-h" min="120" max="230" step="0.5" inputmode="decimal"></label>
       <label class="f">Weight (kg)<input type="number" id="pf-w" min="30" max="250" step="0.1" inputmode="decimal"></label>
       <label class="f">How active<select id="pf-act"><option value="1.2">No workouts</option><option value="1.375">1–3 workouts a week</option><option value="1.55">4–5 workouts a week</option><option value="1.725">6–7 hard sessions</option></select></label>
       <label class="f">Goal<select id="pf-goal"><option value="maintain">Keep my weight</option><option value="muscle">Build muscle</option><option value="cut">Lose fat</option></select></label>
     </div>
-    <label class="chk" style="margin-top:4px"><input type="checkbox" id="pf-y2"><span>Add the MED Cheryl Year 2 class calendar</span></label>
+    <label class="chk" style="margin-top:4px"><input type="checkbox" id="pf-y2"><span>I’m in MED Cheryl Year 2. Add the class calendar, exams and lecture lists</span></label>
     <p class="bk-msg" id="pf-msg" aria-live="polite"></p>
     <div class="bk-act"><span></span><div class="btns"><button class="ghost" id="pf-skip" type="button">Skip for now</button><button class="btn" id="pf-save" type="submit">Save profile</button></div></div>
   </form>
@@ -881,15 +968,58 @@
   <ol class="gd">
     <li><b>Set up once (2 minutes)</b><span>Fill in your profile, then open Settings and turn on <i>Daily reminders</i>. On iPhone or iPad, open the share menu and choose <i>Add to Home Screen</i>, and open it from there from now on. Safari keeps a home-screen app's data much more reliably than a normal tab.</span></li>
     <li><b>Every day, 2 minutes</b><span>Open <i>Overview</i> and fill in <i>Today's checklist</i>. Tick what you did, use + and − for water, sleep, protein, deep work and questions, and rate your energy 1–10 before bed. Logging at night is easiest. Missing one day doesn't break your streak; missing two in a row does.</span></li>
-    <li><b>When you study</b><span>In <i>Study</i>, open the module and tick a lecture once you've actually tested yourself on it, not just read it. In <i>Calendar</i>, tap an empty slot to plan a study block, or press, hold and drag to set its length.</span></li>
-    <li><b>Once a week, about 10 minutes</b><span>Look at <i>Last 7 days</i> on Overview and pick the habit that slipped most. Import your Apple Health export on <i>Health</i>. Then back up: Settings, Data, <i>Backup .json</i>. Keep that file in iCloud Drive or Google Drive.</span></li>
+    <li><b>When you plan</b><span>In <i>Calendar</i>, tap an empty slot to plan a block, or press, hold and drag to set its length. Today's blocks show on Overview. With the MED Cheryl Y2 package on, <i>Study</i> lists every lecture; tick one once you've tested yourself on it, not just read it.</span></li>
+    <li><b>Once a week, about 10 minutes</b><span>Look at <i>Last 7 days</i> on Overview and pick the habit that slipped most. Import your Apple Health export on <i>Health</i>. If you use it without an account, back up: Settings, Data, <i>Backup .json</i>, and keep that file in iCloud Drive or Google Drive.</span></li>
     <li><b>Every 4 weeks</b><span>Do an InBody scan at the same time of day, before eating, and import the CSV on <i>Health</i>. Update your weight in your profile so protein and calories follow.</span></li>
-    <li><b>Where your data lives</b><span>Only in this browser, on this device. Nothing is sent to a server. If you clear Safari's website data, switch devices, or don't open the page for a while, it can be gone. That's what the weekly backup is for. To move to a new device, use <i>Restore</i> with your latest backup.</span></li>
+    <li><b>Where your data lives</b><span>Signed in, everything is saved to your account and follows you to any device; only you can read it. Without an account it stays in this browser, and clearing website data or switching devices loses it, so back up weekly and use <i>Restore</i> to move it.</span></li>
   </ol>
   <div class="bk-act" style="margin-top:16px"><div class="btns" style="margin:0"><button class="ghost" type="button" data-pf-open="1">Edit profile</button><button class="ghost" type="button" id="gd-tour">Take the tour</button></div><button class="btn" type="button" id="gd-ok">Got it</button></div>
 </div>
+<div class="auth" id="auth" hidden>
+  <div class="auth-side">
+    <div class="auth-brand"><span class="auth-logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 20v-9a7 7 0 0 1 14 0v9M9.5 20v-8.5a2.5 2.5 0 0 1 5 0V20"/></svg></span>Life Architect</div>
+    <div class="auth-mid">
+      <h1>Run your day on purpose.</h1>
+      <p class="lead">One place for your habits, training, body data and the time you plan to study or work.</p>
+      <ul class="auth-pts">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>A two-minute daily check-in, with streaks that forgive one bad day</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Calories, protein and water targets worked out from your own numbers</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Your data follows your account to any device, and only you can read it</li>
+      </ul>
+    </div>
+    <p class="auth-foot">Your entries are private to your account.</p>
+  </div>
+  <div class="auth-main">
+    <button class="icon-btn auth-x" id="auth-x" type="button" aria-label="Close" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    <div class="auth-card" role="group" aria-labelledby="auth-h">
+      <h2 id="auth-h" tabindex="-1">Welcome back</h2>
+      <p class="sub" id="auth-sub">Sign in to pick up where you left off.</p>
+      <div class="auth-alert" id="auth-alert" role="alert" hidden></div>
+      <form id="auth-form" novalidate>
+        <label class="f" id="auth-email-l">Email<input type="email" id="auth-email" name="email" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" maxlength="254" placeholder="you@example.com"></label>
+        <label class="f" id="auth-pw-l"><span id="auth-pw-t">Password</span><span class="pw"><input type="password" id="auth-pw" name="password" autocomplete="current-password" maxlength="72"><button type="button" id="auth-eye" aria-label="Show password" aria-pressed="false">Show</button></span></label>
+        <div class="auth-meter" id="auth-meter" data-s="0" hidden><i></i><i></i><i></i><span id="auth-pw-hint">At least 8 characters</span></div>
+        <button class="btn" id="auth-go" type="submit">Sign in</button>
+      </form>
+      <div class="auth-spin" id="auth-spin" role="status" aria-label="Loading" hidden></div>
+      <div class="auth-stack" id="auth-sent" hidden><button class="btn" id="auth-resend" type="button">Send it again</button></div>
+      <div class="auth-stack" id="auth-merge" hidden><button class="btn" id="auth-m-add" type="button">Add it to my account</button><button class="ghost" id="auth-m-drop" type="button">Discard it and use my account</button></div>
+      <div class="auth-row" id="auth-row"><span id="auth-sw"><span id="auth-sw-t">New here?</span> <button type="button" class="linkb" id="auth-sw-b">Create an account</button></span><button type="button" class="linkb" id="auth-forgot">Forgot password?</button><button type="button" class="linkb" id="auth-back" hidden>Back to sign in</button></div>
+      <div class="auth-or" id="auth-or"><span>or</span></div>
+      <button type="button" class="ghost" id="auth-guest">Continue without an account</button>
+      <p class="auth-fine" id="auth-fine">Without an account, your data stays in this browser only.</p>
+    </div>
+  </div>
+</div>
+<div class="acc-toast" id="acc-toast" role="status" hidden></div>
 <aside class="drawer" id="v-set" role="dialog" aria-modal="true" aria-labelledby="set-ttl" hidden>
   <div class="drawer-h"><h3 class="pt" id="set-ttl">Settings</h3><button class="icon-btn" id="set-close" type="button" aria-label="Close settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <section aria-label="Account">
+    <span class="eyebrow">Account</span>
+    <div class="acct"><span class="ava" id="ac-ava" aria-hidden="true">·</span><div><b id="ac-email">Not signed in</b><span class="note" id="ac-stat" role="status">Your data is saved in this browser only.</span></div></div>
+    <div class="btns" style="margin:0"><button class="btn" id="ac-in" type="button">Sign in or create account</button><button class="ghost" id="ac-sync" type="button" hidden>Sync now</button><button class="ghost" id="ac-pw" type="button" hidden>Change password</button><button class="ghost" id="ac-out" type="button" hidden>Sign out</button></div>
+    <details><summary>Delete my data</summary><p class="note" id="ac-del-note" style="margin:8px 0 10px">Removes everything saved on this device. This can’t be undone.</p><button class="ghost danger" id="ac-del" type="button">Delete everything</button></details>
+  </section>
   <section aria-label="Profile">
     <span class="eyebrow">Profile</span>
     <p class="note" id="pf-sum">Not set up yet.</p>
@@ -897,15 +1027,15 @@
   </section>
   <section aria-label="Appearance">
     <span class="eyebrow">Appearance</span>
-    <label class="f">Your name<input type="text" id="c-title" maxlength="28"></label>
+    <label class="f" hidden>Your name<input type="text" id="c-title" maxlength="28"></label>
     <label class="f">Theme<select id="c-theme"><option value="light">Light</option><option value="dark">Dark</option></select></label>
     <div class="f" role="group" aria-label="Accent color"><span>Accent</span><div class="sws" id="c-sw"></div></div>
   </section>
   <section aria-label="Calendar">
     <span class="eyebrow">Calendar export</span>
     <div style="display:flex;gap:16px;flex-wrap:wrap">
-      <label class="chk"><input type="checkbox" id="k-ex" checked>Exams</label>
-      <label class="chk"><input type="checkbox" id="k-bl" checked>Study blocks</label>
+      <label class="chk" id="k-ex-l"><input type="checkbox" id="k-ex" checked>Exams</label>
+      <label class="chk"><input type="checkbox" id="k-bl" checked>Planned blocks</label>
       <label class="chk"><input type="checkbox" id="k-wk" checked>Workouts</label>
     </div>
     <label class="f">Workout time<input type="time" id="c-wt" value="17:30"></label>
@@ -913,10 +1043,10 @@
       <button class="btn" id="c-ics" type="button">Download .ics</button>
       <a class="ghost" target="_blank" rel="noopener noreferrer" href="https://calendar.google.com/calendar/u/0/r/settings/export">Google import page</a>
     </div>
-    <p class="note">One file works in Apple Calendar, Google Calendar and Outlook · Asia/Bangkok</p>
+    <p class="note">One file works in Apple Calendar, Google Calendar and Outlook. Times are exported as Asia/Bangkok.</p>
     <label class="f">Hosted .ics URL (optional, enables live subscribe)<input type="url" id="c-url" placeholder="https://yoursite.com/life-architect.ics"></label>
     <div class="btns" id="c-sub" style="margin:0"></div>
-    <details><summary>Single events to Google Calendar</summary><div id="c-list" style="margin-top:8px"></div></details>
+    <details id="c-single"><summary>Single events to Google Calendar</summary><div id="c-list" style="margin-top:8px"></div></details>
   </section>
   <section aria-label="Daily reminders">
     <span class="eyebrow">Daily reminders</span>
@@ -956,7 +1086,7 @@
   </section>
   <section aria-label="Data">
     <span class="eyebrow">Data</span>
-    <p class="note">Everything lives in this browser on this device. Back up once a week and keep the file in iCloud Drive or Google Drive.</p><p class="note" id="bk-stat" style="margin-top:6px"></p>
+    <p class="note" id="data-note">Everything lives in this browser on this device. Back up once a week and keep the file in iCloud Drive or Google Drive.</p><p class="note" id="bk-stat" style="margin-top:6px"></p>
     <div class="btns" style="margin:0"><button class="btn" id="h-exp" type="button">Backup .json</button><label class="ghost" style="cursor:pointer">Restore<input type="file" id="h-imp" accept="application/json" hidden></label></div>
   </section>
 </aside>
@@ -969,7 +1099,13 @@ var $=function(i){return document.getElementById(i)};
 function taint(v){if(v==null)return v;v=String(v).replace(/[<>`]/g,'');var t=v.charAt(0);return t==='{'||t==='['?v.replace(/\\"/g,"'"):v.replace(/"/g,'')}
 function cln(v,n){return String(v==null?'':v).replace(/[<>"`\\]/g,'').replace(/[\u0000-\u001f\u007f]/g,' ').trim().slice(0,n||120)}
 var isD=function(v){return typeof v==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(v)},isT=function(v){return typeof v==='string'&&/^([01]\d|2[0-3]):[0-5]\d$/.test(v)};
-var st={g:function(k){try{return taint(localStorage.getItem(k))}catch(e){return null}},s:function(k,v){try{localStorage.setItem(k,v)}catch(e){if(!st._warn){st._warn=1;try{console.warn('Life Architect: browser storage is full or blocked, changes may not be saved.')}catch(x){}}}}};
+var st={g:function(k){try{return taint(localStorage.getItem(k))}catch(e){return null}},s:function(k,v){if(st.frozen)return;try{var o_=localStorage.getItem(k);localStorage.setItem(k,v);if(o_!==String(v)&&st.hook)st.hook(k)}catch(e){if(!st._warn){st._warn=1;try{console.warn('Life Architect: browser storage is full or blocked, changes may not be saved.')}catch(x){}}}}};
+/* sync bookkeeping: LX reads and writes raw values; keys under lax_ are device-only and never leave this browser.
+   Every changed la_ key is queued in DIRTY and pushed to the signed-in account by ACC (further down). */
+var LX={g:function(k){try{return localStorage.getItem(k)}catch(e){return null}},s:function(k,v){try{localStorage.setItem(k,v)}catch(e){}},d:function(k){try{localStorage.removeItem(k)}catch(e){}}};
+var SYK=/^la_[A-Za-z0-9_@.:-]{1,80}$/,SYSKIP={la_rail:1,la_rem_fired:1,la_gconn:1,la_calview:1,la_lt_open:1,la_last_backup:1,la_bk_snooze:1,la_pf_skip:1},OWN=LX.g('lax_uid'),DIRTY={},dirtyQ=false;
+try{DIRTY=JSON.parse(LX.g('lax_dirty')||'{}')}catch(e){DIRTY={}}if(!DIRTY||typeof DIRTY!=='object'||Array.isArray(DIRTY))DIRTY={};
+st.hook=function(k){if(!OWN||!SYK.test(k)||SYSKIP[k])return;DIRTY[k]=Date.now();if(!dirtyQ){dirtyQ=true;Promise.resolve().then(function(){dirtyQ=false;LX.s('lax_dirty',JSON.stringify(DIRTY))})}if(st.kick)st.kick()};
 /* profile: entered once in the setup dialog, then feeds the calculator, habit targets and the name */
 var PF=null;try{PF=JSON.parse(st.g('la_profile')||'null')}catch(e){PF=null}
 function pfOK(o){return o&&(o.sex==='F'||o.sex==='M')&&isD(o.dob)&&+o.h>=120&&+o.h<=230&&+o.w>=30&&+o.w<=250}
@@ -1176,7 +1312,7 @@ if(!HAB||!HAB.length){var yd=hDate(today,-1),OLD='2000-01-01';HAB=[
   {k:7,n:'Plan tomorrow, clear small admin',a:'s',t:'check',from:OLD}];
   st.s('la_habits',JSON.stringify(HAB))}
 function saveHab(){st.s('la_habits',JSON.stringify(HAB))}
-function proTarget(){var w=parseFloat(($('w')||{}).value)||55;return Math.round(w*goalOf().pk/5)*5}
+function proTarget(){var w=parseFloat(($('w')||{}).value)||60;return Math.round(w*goalOf().pk/5)*5}
 function hGoal(h){return h.k===10&&!h.g?proTarget():h.g}
 function hOn(h,d){if(d<h.from||(h.to&&d>h.to))return false;var dw=new Date(d+'T00:00:00').getDay();return !h.days||h.days.indexOf(dw)>=0}
 function hVal(h,d){var v=st.g('la_'+d+'_'+h.k);return v==null||v===''||v==='1'||v==='0'||isFinite(+v)?v:null}
@@ -1266,38 +1402,39 @@ function pfSum(){if(!PF){$('pf-sum').textContent='Not set up yet.';return}
   $('pf-sum').textContent=(PF.name||'You')+' · '+(PF.sex==='F'?'female':'male')+', '+Math.floor(pfAge(PF.dob))+' · '+PF.h+' cm, '+PF.w+' kg · '+GOAL[PF.goal].t.toLowerCase()}
 function dlgOpen(id){$(id.replace('dlg','scrim')).hidden=false;$(id).hidden=false;var f=$(id).querySelector('input,select,button');if(f)setTimeout(function(){try{f.focus({preventScroll:true})}catch(e){}},30)}
 function dlgClose(id){$(id).hidden=true;$(id.replace('dlg','scrim')).hidden=true}
-function pfOpen(){var P=PF||{};$('pf-name').value=P.name!=null?P.name:(cfg.title||'');$('pf-role').value=P.role!=null?P.role:($('who-r').textContent||'');$('pf-sex').value=P.sex||$('g').value;
+function pfOpen(){var P=PF||{};$('pf-name').value=P.name!=null?P.name:(cfg.title||'');$('pf-role').value=P.role!=null?P.role:($('who-r').textContent||'');$('pf-sex').value=P.sex||'';
   $('pf-dob').value=P.dob||'';$('pf-dob').max=hDate(today,-365*10);$('pf-h').value=P.h||$('h').value;$('pf-w').value=P.w||$('w').value;$('pf-act').value=P.act||$('act').value;$('pf-goal').value=P.goal||'maintain';
-  $('pf-y2').checked=Y2();$('pf-msg').textContent='';$('pf-skip').textContent=PF?'Cancel':'Skip for now';dlgOpen('pf-dlg')}
+  $('pf-y2').checked=Y2();$('pf-msg').textContent='';$('pf-skip').textContent='Cancel';$('pf-skip').hidden=!PF;$('pf-ttl').textContent=PF?'Edit your profile':'Set up your profile';
+  $('pf-note').textContent=(PF?'':'Welcome. Start with a few details about you. ')+'This sets your calories, protein and water targets'+(ACC.signed()?', and only you can see it.':'. You can change it any time.');dlgOpen('pf-dlg')}
 function pfApplyAll(first){pfFill();cfg.title=PF.name;save();$('who-r').textContent=PF.role||'';calc();
   var W=HAB.filter(function(h){return h.k===8})[0];if(W&&(W.g===8||W.g===10)){W.g=PF.sex==='M'?10:8;W.note=W.g+' × 250 ml ≈ '+(W.g/4)+' L a day. Add a glass or two on workout days.';saveHab()}
   renderDaily();try{dash(true)}catch(e){}pfSum();if(first)st.s('la_since',st.g('la_since')||today)}
 $('pf-form').addEventListener('submit',function(e){e.preventDefault();
   var o={name:cln($('pf-name').value,28),role:cln($('pf-role').value,40),sex:$('pf-sex').value==='M'?'M':'F',dob:$('pf-dob').value,h:+$('pf-h').value,w:+$('pf-w').value,act:$('pf-act').value,goal:$('pf-goal').value,since:(PF&&PF.since)||today};
-  var m='';if(!isD(o.dob)||o.dob>hDate(today,-365*10)||o.dob<'1930-01-01')m='Add your birth date.';else if(!(o.h>=120&&o.h<=230))m='Height should be in centimetres, between 120 and 230.';else if(!(o.w>=30&&o.w<=250))m='Weight should be in kilograms, between 30 and 250.';
+  var m='';if(!o.name)m='Add your name.';else if($('pf-sex').value!=='F'&&$('pf-sex').value!=='M')m='Choose a sex. The calorie formula needs it.';else if(!isD(o.dob)||o.dob>hDate(today,-365*10)||o.dob<'1930-01-01')m='Add your birth date.';else if(!(o.h>=120&&o.h<=230))m='Height should be in centimetres, between 120 and 230.';else if(!(o.w>=30&&o.w<=250))m='Weight should be in kilograms, between 30 and 250.';
   if(m){$('pf-msg').textContent=m;return}
   var first=!PF;PF=o;st.s('la_profile',JSON.stringify(PF));if($('pf-y2').checked!==Y2())setMode($('pf-y2').checked?'y2':'personal');
   pfApplyAll(first);dlgClose('pf-dlg');
   try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist().then(bkUI)}catch(x){}
   if(first&&!st.g('la_tour_done'))setTimeout(function(){TOUR.start()},300)});
 $('pf-skip').onclick=function(){if(!PF)st.s('la_pf_skip',today);dlgClose('pf-dlg')};
-$('pf-scrim').onclick=function(){dlgClose('pf-dlg')};
+$('pf-scrim').onclick=function(){if(PF)dlgClose('pf-dlg')};
 function gdClose(){st.s('la_guide_seen','1');dlgClose('gd-dlg')}
 $('gd-x').onclick=gdClose;$('gd-tour').onclick=function(){gdClose();TOUR.start()};$('gd-read').onclick=function(){$('set-close').click();dlgOpen('gd-dlg')};$('gd-ok').onclick=gdClose;$('gd-scrim').onclick=gdClose;
 
 document.querySelector('.la-widget').addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-pf-open]');if(!b)return;if(!$('gd-dlg').hidden)dlgClose('gd-dlg');if(!$('v-set').hidden)$('set-close').click();pfOpen()});
-document.querySelector('.la-widget').addEventListener('keydown',function(e){if(e.key!=='Escape')return;if(!$('pf-dlg').hidden){e.preventDefault();dlgClose('pf-dlg')}else if(!$('gd-dlg').hidden){e.preventDefault();gdClose()}});
+document.querySelector('.la-widget').addEventListener('keydown',function(e){if(e.key!=='Escape')return;if(!$('pf-dlg').hidden){e.preventDefault();if(PF)dlgClose('pf-dlg')}else if(!$('gd-dlg').hidden){e.preventDefault();gdClose()}});
 function bkDays(){var b=st.g('la_last_backup');return isD(b)?Math.round((new Date(today+'T00:00:00')-new Date(b+'T00:00:00'))/864e5):null}
 function bkUI(){var d=bkDays(),since=st.g('la_since'),age=isD(since)?Math.round((new Date(today+'T00:00:00')-new Date(since+'T00:00:00'))/864e5):0,snz=st.g('la_bk_snooze');
   var txt=d===null?'No backup yet.':d===0?'Last backup: today.':'Last backup: '+d+(d===1?' day':' days')+' ago.';
   if(navigator.storage&&navigator.storage.persisted){navigator.storage.persisted().then(function(p){$('bk-stat').textContent=txt+(p?' This browser has agreed to keep your data.':'')}).catch(function(){$('bk-stat').textContent=txt})}else $('bk-stat').textContent=txt;
-  var show=(d===null?age>=3:d>=7)&&!(isD(snz)&&snz>=today);$('bk-nudge').hidden=!show;
+  var show=(d===null?age>=3:d>=7)&&!(isD(snz)&&snz>=today)&&!(typeof ACC!=='undefined'&&ACC&&ACC.signed());$('bk-nudge').hidden=!show;
   if(show)$('bk-nudge-t').textContent=d===null?'Your data only lives in this browser. Save a backup so a cleared browser doesn’t cost you your history.':'Your last backup was '+d+' days ago. It takes one tap.'}
 $('bk-now').onclick=function(){$('h-exp').click()};$('bk-later').onclick=function(){st.s('la_bk_snooze',hDate(today,2));bkUI()};
 /* runs after the whole script has loaded, so settings (cfg) exist */
 setTimeout(function(){if(!st.g('la_since')&&PF)st.s('la_since',PF.since||today);
   if(PF){$('who-r').textContent=PF.role||'';if(PF.name){cfg.title=PF.name;applyCfg()}}
-  pfSum();bkUI();if(!PF&&!st.g('la_pf_skip'))setTimeout(pfOpen,400)},0);
+  pfSum();bkUI();ACC.onReady(function(){if(!PF&&!st.g('la_pf_skip'))setTimeout(pfOpen,350)})},0);
 
 /* ---------- interactive tour: dims the page, spotlights one control, explains it.
    Info steps have Next. Action steps wait for a tap on the highlighted control and block everything else. ---------- */
@@ -1306,17 +1443,18 @@ var TOUR=(function(){
   function setOpen(o){if(!$('v-set'))return;if(o&&$('v-set').hidden)$('set-open').click();if(!o&&!$('v-set').hidden)$('set-close').click()}
   function card(sel){var e=document.querySelector(sel);return e&&(e.closest('section.panel')||e)}
   var STEPS=[
-    {t:'Your four spaces',b:'Overview is today. Health is food, training and your body. Study is your lectures. Calendar is classes and study blocks.',sel:function(){return $('mt')},pre:function(){setOpen(false);view('overview')}},
-    {t:'Log your day here',b:'Tick what you did. Use + and − for water, sleep, protein and study blocks, and rate your energy before bed. Two minutes a night is enough.',sel:function(){return card('#ov-ck')},pre:function(){setOpen(false);view('overview')}},
+    {t:function(){return Y2()?'Your four spaces':'Your three spaces'},b:function(){return Y2()?'Overview is today. Health is food, training and your body. Study is your lectures. Calendar is classes and study blocks.':'Overview is today. Health is food, training and your body. Calendar is where you plan your time.'},sel:function(){return $('mt')},pre:function(){setOpen(false);view('overview')}},
+    {t:'Log your day here',b:'Tick what you did. Use + and − for water, sleep, protein and deep work, and rate your energy before bed. Two minutes a night is enough.',sel:function(){return card('#ov-ck')},pre:function(){setOpen(false);view('overview')}},
     {t:'Open Health',b:'Tap Health. Everything outside the highlighted button is paused while this step is active.',act:1,sel:function(){return $('tab-health')},pre:function(){setOpen(false);view('overview')}},
     {t:'Your numbers',b:'Calories and protein come from your profile. After each InBody scan, update your weight with Edit profile.',sel:function(){return card('#h-met')},pre:function(){setOpen(false);view('health')}},
-    {t:'Open Study',b:'Tap Study to see your lecture checklists.',act:1,sel:function(){return $('tab-main')},pre:function(){setOpen(false);view('health')}},
-    {t:'Tick lectures as you go',b:'Each subject lists its lecture topics from your calendar. Tick one once you’ve tested yourself on it, not when you’ve only read it.',sel:function(){return document.querySelector('.lt-panel')},pre:function(){setOpen(false);view('main')}},
-    {t:'Open Calendar',b:'Tap Calendar to plan your study time.',act:1,sel:function(){return $('tab-cal')},pre:function(){setOpen(false);view('main')}},
-    {t:'Plan study blocks',b:'Tap an empty slot for a 1-hour block. On a touchscreen, press and hold, then drag to set how long it is.',sel:function(){return $('cal-body')},pre:function(){setOpen(false);view('cal')}},
-    {t:'Open Settings',b:'Tap the gear. Reminders and backups live here.',act:1,sel:function(){return $('set-open')},pre:function(){setOpen(false)}},
+    {t:'Open Study',b:'Tap Study to see your lecture checklists.',act:1,y2:1,sel:function(){return $('tab-main')},pre:function(){setOpen(false);view('health')}},
+    {t:'Tick lectures as you go',y2:1,b:'Each subject lists its lecture topics from your calendar. Tick one once you’ve tested yourself on it, not when you’ve only read it.',sel:function(){return document.querySelector('.lt-panel')},pre:function(){setOpen(false);view('main')}},
+    {t:'Open Calendar',b:'Tap Calendar to plan your time.',act:1,sel:function(){return $('tab-cal')},pre:function(){setOpen(false);view(Y2()?'main':'health')}},
+    {t:'Plan your blocks',b:'Tap an empty slot for a 1-hour block. On a touchscreen, press and hold, then drag to set how long it is.',sel:function(){return $('cal-body')},pre:function(){setOpen(false);view('cal')}},
+    {t:'Open Settings',b:'Tap the gear. Your account, reminders and backups live here.',act:1,sel:function(){return $('set-open')},pre:function(){setOpen(false)}},
     {t:'Turn on reminders',b:'Pick a time and how many nudges you want. Add them to your calendar so they still reach you when this page is closed.',sel:function(){return document.querySelector('#v-set section[aria-label="Daily reminders"]')},pre:function(){setOpen(true)}},
-    {t:'Back up every week',b:'Your data only lives in this browser. Tap Backup once a week and keep the file in iCloud Drive or Google Drive.',sel:function(){return document.querySelector('#v-set section[aria-label="Data"]')},pre:function(){setOpen(true)},last:1}];
+    {t:function(){return ACC.signed()?'Your data is safe':'Back up every week'},b:function(){return ACC.signed()?'Everything is saved to your account and follows you to any device. You can still download a backup file here whenever you want your own copy.':'Without an account, your data only lives in this browser. Tap Backup once a week and keep the file in iCloud Drive or Google Drive.'},sel:function(){return document.querySelector('#v-set section[aria-label="Data"]')},pre:function(){setOpen(true)},last:1}];
+  var ALLS=STEPS;function txt(v){return typeof v==='function'?v():v}
   function build(){if(ui)return;ui={};
     ui.hole=mk('tour-hole');ui.blk=[0,1,2,3].map(function(){var b=mk('tour-blk');b.addEventListener('click',nudge);return b});
     ui.card=mk('tour-card');ui.card.setAttribute('role','dialog');ui.card.setAttribute('aria-modal','true');ui.card.setAttribute('aria-labelledby','tour-t');ui.card.tabIndex=-1;
@@ -1348,7 +1486,7 @@ var TOUR=(function(){
   function go(n){if(n<0)return;if(n>=STEPS.length)return end(true);var S=STEPS[n];try{S.pre&&S.pre()}catch(e){}
     var e=S.sel();if(!e||!(e.offsetWidth||e.offsetHeight)){if(n>ix)return go(n+1);return go(n-1)}
     ix=n;el=e;try{if(!S.act||S.sel()!==$('set-open'))e.scrollIntoView({block:e.getBoundingClientRect().height>window.innerHeight*.7?'start':'center',inline:'nearest'})}catch(x){}
-    var c=ui.card;c.querySelector('#tour-n').textContent='Step '+(n+1)+' of '+STEPS.length;c.querySelector('#tour-t').textContent=S.t;c.querySelector('.tour-b').textContent=S.b;
+    var c=ui.card;c.querySelector('#tour-n').textContent='Step '+(n+1)+' of '+STEPS.length;c.querySelector('#tour-t').textContent=txt(S.t);c.querySelector('.tour-b').textContent=txt(S.b);
     c.querySelector('.tour-hint').hidden=!S.act;c.querySelector('.tour-next').hidden=!!S.act;c.querySelector('.tour-next').textContent=S.last?'Finish':'Next';
     c.querySelector('.tour-back').style.visibility=n?'visible':'hidden';c.querySelector('.tour-guide').hidden=!S.last;
     c.querySelector('.tour-dots').innerHTML=STEPS.map(function(_,i){return '<i'+(i===n?' class="on"':i<n?' class="done"':'')+'></i>'}).join('');
@@ -1357,7 +1495,7 @@ var TOUR=(function(){
   function onKey(e){if(ix<0)return;if(e.key==='Escape'){e.preventDefault();e.stopPropagation();end(false)}
     else if((e.key==='ArrowRight'||e.key==='Enter')&&!STEPS[ix].act&&e.target===ui.card){e.preventDefault();ui.card.querySelector('.tour-next').click()}
     else if(e.key==='ArrowLeft'&&e.target===ui.card&&ix>0){e.preventDefault();go(ix-1)}}
-  function start(){build();if(!$('gd-dlg').hidden)dlgClose('gd-dlg');if(!$('pf-dlg').hidden)dlgClose('pf-dlg');
+  function start(){STEPS=ALLS.filter(function(x){return !x.y2||Y2()});build();if(!$('gd-dlg').hidden)dlgClose('gd-dlg');if(!$('pf-dlg').hidden)dlgClose('pf-dlg');
     document.addEventListener('click',onClick,true);document.addEventListener('keydown',onKey,true);window.addEventListener('resize',place);
     timer=setInterval(function(){if(ix>=0)place()},200);ix=-1;go(0)}
   function end(done){if(!ui)return;clearInterval(timer);document.removeEventListener('click',onClick,true);document.removeEventListener('keydown',onKey,true);window.removeEventListener('resize',place);
@@ -1381,7 +1519,7 @@ function remToast(msg){var t=root.querySelector('.rem-toast');if(!t){t=document.
   t.children[0].textContent='Time to log today’s stats';t.children[1].textContent=msg;t.hidden=false}
 function remFire(test){var pc=Math.round(dayScore(today)*100),msg=test?'This is a test. Your reminders will look like this.':'Today is at '+pc+'%. Water, sleep, protein and your study blocks take a minute.';
   remToast(msg);if(typeof Notification!=='undefined'&&Notification.permission==='granted'){try{new Notification('Life Architect: log today’s stats',{body:msg,tag:'la-rem'})}catch(e){}}}
-function remCheck(){if(!REM.on)return;var n=new Date(),hm=p2(n.getHours())+':'+p2(n.getMinutes()),T=remTimes().filter(function(t){return t<=hm});if(!T.length)return;
+function remCheck(){if(!REM.on||(typeof ACC!=='undefined'&&ACC&&ACC.gate()))return;var n=new Date(),hm=p2(n.getHours())+':'+p2(n.getMinutes()),T=remTimes().filter(function(t){return t<=hm});if(!T.length)return;
   if(REM.stop&&dayScore(today)>=.6)return;var f;try{f=JSON.parse(st.g('la_rem_fired')||'null')}catch(e){f=null}if(!f||f.d!==today||!Array.isArray(f.s))f={d:today,s:[]};
   var last=T[T.length-1];if(f.s.indexOf(last)>=0)return;f.s=T;st.s('la_rem_fired',JSON.stringify(f));remFire(false)}
 function remICS(){var T=remTimes();if(!T.length)return;var d=ymd(new Date()).replace(/-/g,''),stamp=new Date().toISOString().replace(/[-:]/g,'').replace(/\.\d+/,''),L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Life Architect//Reminders//EN','CALSCALE:GREGORIAN','X-WR-CALNAME:Life Architect reminders'];
@@ -1455,12 +1593,11 @@ function wtFill(){var n=0;Object.keys(WT).forEach(function(d){var r=WT[d],age=(n
   wtRender()})();
 
 /* ---------- InBody (history, segmental body chart, trends) ---------- */
-var SEED={t:'2026-11-04T18:33',w:54.6,smm:25.5,fat:9.0,bmi:20.1,pbf:16.5,bmr:1355,sc:75,vfl:3,tbw:33.6,pro:9.1,min:2.95,smi:7.0,abd:0.89,l:{ra:2.67,la:2.56,tr:21.8,rl:6.83,ll:6.9},f:{ra:.4,la:.4,tr:4.2,rl:1.5,ll:1.5}};
-var INB;try{INB=JSON.parse(st.g('la_inbody')||'null')||[SEED]}catch(e){INB=[SEED]}
+var INB;try{INB=JSON.parse(st.g('la_inbody')||'[]')||[]}catch(e){INB=[]}
 function scanOK(m){if(!m||typeof m.t!=='string'||!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(m.t)||!m.l||!m.f)return false;
   Object.keys(m).forEach(function(k){if(k!=='t'&&k!=='l'&&k!=='f'&&m[k]!=null&&!isFinite(+m[k]))m[k]=null;else if(k!=='t'&&k!=='l'&&k!=='f'&&m[k]!=null)m[k]=+m[k]});
   ['l','f'].forEach(function(g){['ra','la','tr','rl','ll'].forEach(function(k){var v=m[g][k];m[g][k]=v==null||!isFinite(+v)?null:+v})});return true}
-if(!Array.isArray(INB))INB=[SEED];INB=INB.filter(scanOK);if(!INB.length)INB=[SEED];
+if(!Array.isArray(INB))INB=[];INB=INB.filter(scanOK);
 var IS=INB.length-1,IM='lean',IT='w';
 function saveI(){st.s('la_inbody',JSON.stringify(INB))}
 function parseCSV(tx){var out=[];if(tx.length>2e6)return out;tx.replace(/^\uFEFF/,'').split(/\r?\n/).filter(Boolean).slice(1,2001).forEach(function(l){var c=l.split(','),ts=(c[0]||'').replace(/"/g,'').trim(),n=function(i){var v=(c[i]||'').replace(/"/g,'').trim();if(v===''||v==='-')return null;v=+v;return isFinite(v)?v:null};if(!/^\d{12}/.test(ts))return;
@@ -1475,9 +1612,10 @@ var SIL='<g fill="#71717A" fill-opacity=".16" transform="translate(230 205)"><ci
    trunk 44.2%, each leg 20.05%, each arm 7.85% of the segment total. Segment total = 4.58 kg per m² of height² (female). */
 var FSH={tr:.442,rl:.2005,ll:.2005,ra:.0785,la:.0785};
 function fatStd(){var c;try{c=JSON.parse(st.g('la_inb_fstd')||'null')}catch(e){c=null}if(c&&c.tr)return {v:c,cal:true};
-  var h=(parseFloat(($('h')||{}).value)||165)/100,tot=4.58*h*h,o={};SEG.forEach(function(k){o[k]=tot*FSH[k]});return {v:o,cal:false}}
+  var h=((PF&&PF.h)||parseFloat(($('h')||{}).value)||165)/100,tot=(PF&&PF.sex==='M'?3.06:4.58)*h*h,o={};SEG.forEach(function(k){o[k]=tot*FSH[k]});return {v:o,cal:false}}
 var RM={lean:{lo:90,hi:110,t:['Below normal','Normal','Above normal'],c:['#D97706','#16A34A','#2563EB']},fat:{lo:78,hi:122,t:['Under','Normal','Over'],c:['#2563EB','#16A34A','#D97706']}};
-function segPct(M,mode){var src=mode==='lean'?M.l:M.f,sd=mode==='lean'?IDEAL:fatStd().v,o={};SEG.forEach(function(k){o[k]=src[k]==null||!sd[k]?null:Math.round(src[k]/sd[k]*1000)/10});return o}
+function leanStd(){var h=(PF&&PF.h)||parseFloat(($('h')||{}).value)||165,k=(h/165)*(h/165)*(PF&&PF.sex==='M'?1.13:1),o={};SEG.forEach(function(s){o[s]=IDEAL[s]*k});return o}
+function segPct(M,mode){var src=mode==='lean'?M.l:M.f,sd=mode==='lean'?leanStd():fatStd().v,o={};SEG.forEach(function(k){o[k]=src[k]==null||!sd[k]?null:Math.round(src[k]/sd[k]*1000)/10});return o}
 function radar(M,mode){mode=mode||'lean';var cx=230,cy=205,R=135,ord=['tr','ra','rl','ll','la'],nm={tr:'Trunk',ra:'Right arm',rl:'Right leg',ll:'Left leg',la:'Left arm'},rm=RM[mode];
   var pc=segPct(M,mode),top=0;ord.forEach(function(k){top=Math.max(top,pc[k]||0)});var mx=Math.max(160,Math.ceil((top+15)/20)*20);
   function P(i,v){var a=-Math.PI/2+i*2*Math.PI/5,r=R*v/mx;return [cx+r*Math.cos(a),cy+r*Math.sin(a)]}
@@ -1494,7 +1632,7 @@ function fatCal(M){var fs=fatStd(),pc=segPct(M,'fat');
   if(!FCAL)return '<p class="mu" style="font-size:11px;margin-top:8px">% of the standard fat for your height. Dashed line = 100%, green band = normal (78–122%). '+(fs.cal?'Using the standards from your InBody app. <button type="button" class="linkb" data-fcal="1">Change</button>':'<b>Estimated</b> from InBody’s reference split for your height. Your CSV only has kg rounded to 0.1, which can move the arms by a few %. <button type="button" class="linkb" data-fcal="1">Enter the exact % from your InBody app</button>.')+'</p>';
   return '<div class="fcal"><p class="mu" style="font-size:12px;margin:0 0 8px">Open this scan in the InBody app, go to segmental fat, and type the five percentages. The standards are saved and used for every scan after.</p><div class="fcal-g">'+SO.map(function(s){return '<label class="f">'+s[1]+'<input type="number" step="0.1" min="1" data-fp="'+s[0]+'" placeholder="'+(fs.cal&&pc[s[0]]!=null?pc[s[0]]:'%')+'"></label>'}).join('')+'</div><div class="btns" style="margin-top:10px"><button type="button" class="ghost" data-fsave="1">Save</button>'+(fs.cal?'<button type="button" class="ghost" data-freset="1">Back to estimate</button>':'')+'<button type="button" class="ghost" data-fcal="0">Cancel</button></div></div>'}
 function segView(M,Q,mode){var src=mode==='lean'?M.l:M.f,pv=Q?(mode==='lean'?Q.l:Q.f):null,g=mode==='lean'?1:-1;
-  return radar(M,mode)+'<div class="segs">'+SO.map(function(s){var k=s[0],v=src[k];return '<div class="seg"><span class="mu">'+s[1]+'</span><b>'+(v==null?'–':v)+' <small>kg</small></b>'+(pv?dlt(v,pv[k],g):'<span></span>')+'</div>'}).join('')+'</div>'+(mode==='lean'?'<p class="mu" style="font-size:11px;margin-top:8px">% of the standard for your height (derived from your 4 Nov scan). Dashed line = 100%, green band = normal (90–110%).</p>':fatCal(M))}
+  return radar(M,mode)+'<div class="segs">'+SO.map(function(s){var k=s[0],v=src[k];return '<div class="seg"><span class="mu">'+s[1]+'</span><b>'+(v==null?'–':v)+' <small>kg</small></b>'+(pv?dlt(v,pv[k],g):'<span></span>')+'</div>'}).join('')+'</div>'+(mode==='lean'?'<p class="mu" style="font-size:11px;margin-top:8px">% of an estimated standard for your height and sex. Dashed line = 100%, green band = normal (90–110%).</p>':fatCal(M))}
 var TM={w:'Weight (kg)',smm:'Muscle SMM (kg)',fat:'Fat mass (kg)',pbf:'Body fat (%)',sc:'InBody score'};
 function chart(k){var pts=INB.filter(function(m){return m[k]!=null});if(!pts.length)return '<p class="mu">No data</p>';
   var vs=pts.map(function(m){return m[k]}),lo=Math.min.apply(null,vs),hi=Math.max.apply(null,vs),pd=(hi-lo)||Math.max(1,hi*.05);lo-=pd*.4;hi+=pd*.4;
@@ -1504,7 +1642,7 @@ function chart(k){var pts=INB.filter(function(m){return m[k]!=null});if(!pts.len
 function tabs2(attr,cur,items){return '<div class="tabs" style="margin-bottom:10px">'+items.map(function(i){return '<button type="button" class="tab" '+attr+'="'+i[0]+'" aria-selected="'+(i[0]===cur)+'"'+''+'>'+i[1]+'</button>'}).join('')+'</div>'}
 function inbRender(){var P=$('inb'),M=INB[IS],Q=IS>0?INB[IS-1]:null,h;
   h='<div class="ph"><div class="pt"> InBody</div><div class="btns" style="margin:0">'+(M?'<select id="inb-sel">'+INB.map(function(m,i){return '<option value="'+i+'"'+(i===IS?' selected':'')+'>'+m.t.replace('T',' ')+'</option>'}).join('')+'</select>':'')+'<label class="ghost" style="cursor:pointer">Import CSV<input type="file" id="inb-f" accept=".csv,text/csv" hidden></label>'+(M?'<button class="ghost" id="inb-del" type="button">Delete scan</button>':'')+'</div></div>';
-  if(!M){P.innerHTML=h+'<p class="mu">No scans yet. Select Import CSV and choose the file exported from InBody.</p>';return}
+  if(!M){P.innerHTML=h+'<p class="empty">No scans yet. After a scan, export the CSV from the InBody app and choose Import CSV. Your muscle, fat and segment charts appear here.</p>';return}
   var q=Q||{},nx=new Date(Date.parse(M.t));
   h+='<div class="stats" style="margin-top:0">'+kpi('Weight',M.w,'kg',dlt(M.w,q.w,0,' kg'))+kpi('Muscle (SMM)',M.smm,'kg',dlt(M.smm,q.smm,1,' kg'))+kpi('Fat mass',M.fat,'kg',dlt(M.fat,q.fat,-1,' kg'))+kpi('Body fat',M.pbf,'%',dlt(M.pbf,q.pbf,-1,' %'))+kpi('BMI',M.bmi,'',dlt(M.bmi,q.bmi,0))+kpi('BMR',M.bmr,'kcal',dlt(M.bmr,q.bmr,1))+kpi('InBody score',M.sc,'',dlt(M.sc,q.sc,1))+'</div>';
   h+='<div class="two" style="margin-top:18px"><div>'+tabs2('data-im',IM,[['lean','Muscle'],['fat','Fat']])+segView(M,Q,IM)+'</div>';
@@ -1524,7 +1662,6 @@ $('inb').addEventListener('click',function(e){var t=e.target;
   if(t.dataset.im){IM=t.dataset.im;inbRender()}else if(t.dataset.it){IT=t.dataset.it;inbRender()}
   else if(t.id==='inb-del'&&confirm('Delete this scan?')){INB.splice(IS,1);IS=Math.max(0,INB.length-1);saveI();inbRender()}});
 inbRender();
-if(INB.length&&INB[INB.length-1].w&&+$('w').value===55.5){$('w').value=INB[INB.length-1].w;calc()}
 
 var ph=[['#38BDF8','Phase 1','18 Oct – 4 Nov','GI + Joints quiz','HGB-1 · HGA Joints',['<b>Write up GI lectures the same day.</b> Physiology, pathology, liver and biliary.','<b>PBL 28 and 30 Oct:</b> go over the mechanisms the night before.','<b>HGA Joints:</b> lectures 20 Oct and 3 Nov, labs 27 Oct and 3 Nov.'],'Training: full, 3 sessions a week',[['Quiz HGA: Joints','Wed 4 Nov · 15:00']]],
  ['#10B981','Phase 2','5 – 20 Nov','Repro, then two exams in one week','HRP-1 · exam week',['<b>5–13 Nov:</b> get HRP-1 done in class. PBL 11 and 13 Nov.','<b>14–16 Nov:</b> GI questions for Tuesday.','<b>17–19 Nov:</b> Repro only until Friday.'],'Training: full until 13 Nov, then 70%',[['Exam HGB-1','Tue 17 Nov · 08:00'],['Exam HRP-1','Fri 20 Nov · 08:30']]],
@@ -1549,16 +1686,16 @@ function tick(){
   if(d>=0&&d<=N){var t=$('today');t.style.left=(d/N*100).toFixed(2)+'%';t.style.display='block'}else $('today').style.display='none'
 }
 /* ---------- customize (saved in this browser) ---------- */
-var root=document.querySelector('.la-widget'),cfg={theme:'light',ac:'ink',ac2:'',title:'Popo',wt:'17:30',url:''};
+var root=document.querySelector('.la-widget'),cfg={theme:'light',ac:'ink',ac2:'',title:'',wt:'17:30',url:''};
 try{var cf0=JSON.parse(st.g('la_cfg')||'{}');if(cf0&&typeof cf0==='object')['theme','ac','ac2','title','wt','url','v3'].forEach(function(k){if(cf0[k]!=null)cfg[k]=cf0[k]})}catch(e){}
 cfg.title=cln(cfg.title,40);if(!isT(cfg.wt))cfg.wt='17:30';if(!/^https?:\/\/[^\s'"<>]+$/.test(cfg.url||''))cfg.url='';
-if(!cfg.v3){cfg.theme='light';cfg.ac='ink';if(!cfg.title||cfg.title==='Life Architect')cfg.title='Popo';cfg.v3=1;st.s('la_cfg',JSON.stringify(cfg))}
+if(!cfg.v3){cfg.theme='light';cfg.ac='ink';if(cfg.title==='Life Architect')cfg.title='';cfg.v3=1;st.s('la_cfg',JSON.stringify(cfg))}
 if(cfg.theme!=='dark')cfg.theme='light';
 var sws=[['ink','Ink'],['#2563EB','Blue'],['#16A34A','Green'],['#EA580C','Orange']];
 if(sws.every(function(c){return c[0]!==cfg.ac}))cfg.ac='ink';
 function applyCfg(){
   root.setAttribute('data-theme',cfg.theme);if(cfg.ac==='ink')root.style.removeProperty('--accent-pick');else root.style.setProperty('--accent-pick',cfg.ac);
-  $('ttl').textContent=cfg.title||'there';var nmv=(cfg.title||'P').trim();$('ava').textContent=(nmv.charAt(0)||'P').toUpperCase();$('who-n').textContent=nmv||'You';
+  $('ttl').textContent=cfg.title||'there';var nmv=(cfg.title||'').trim();$('ava').textContent=(nmv.charAt(0)||'·').toUpperCase();$('who-n').textContent=nmv||'You';
   [].forEach.call($('c-sw').children,function(b){b.setAttribute('aria-pressed',b.dataset.c===cfg.ac)});
   var u=cfg.url&&/^https?:\/\//.test(cfg.url)?cfg.url:'';
   $('c-sub').innerHTML=u?'<a class="ghost" href="webcal://'+encodeURI(u.replace(/^https?:\/\//,''))+'"> Subscribe in Apple Calendar</a><a class="ghost" target="_blank" rel="noopener noreferrer" href="https://calendar.google.com/calendar/r?cid='+encodeURIComponent('webcal://'+u.replace(/^https?:\/\//,''))+'">Subscribe in Google Calendar</a>':'';
@@ -1578,13 +1715,14 @@ function df(d){return d.getUTCFullYear()+p2(d.getUTCMonth()+1)+p2(d.getUTCDate()
 function lp(s){var m=s.match(/(\d+)-(\d+)-(\d+)T?(\d+)?:?(\d+)?/);return new Date(Date.UTC(m[1],m[2]-1,m[3],m[4]||0,m[5]||0))}
 function events(){
   var ev=[];
-  if($('k-ex').checked)exams.forEach(function(e){var s=lp(e[1]);ev.push({t:e[0],s:lf(s),e:lf(new Date(+s+(e[4]?1:2)*36e5)),a:[1440,60]})});
-  if($('k-bl').checked)blocks.filter(function(b){return b[0]!==4}).forEach(function(b){ev.push({t:'Study block: '+b[3],ad:1,s:df(lp(b[1])),e:df(new Date(+lp(b[2])+864e5))})});
+  if(Y2()&&$('k-ex').checked)exams.forEach(function(e){var s=lp(e[1]);ev.push({t:e[0],s:lf(s),e:lf(new Date(+s+(e[4]?1:2)*36e5)),a:[1440,60]})});
+  if(Y2()&&$('k-bl').checked)blocks.filter(function(b){return b[0]!==4}).forEach(function(b){ev.push({t:'Study block: '+b[3],ad:1,s:df(lp(b[1])),e:df(new Date(+lp(b[2])+864e5))})});
+  if($('k-bl').checked&&typeof BL!=='undefined'&&BL)BL.forEach(function(b){var d=b.date.replace(/-/g,'');ev.push({t:b.title,s:d+'T'+b.s.replace(':','')+'00',e:d+'T'+b.e.replace(':','')+'00',a:[10]})});
   if($('k-wk').checked)[['Push',1,'MO'],['Pull',3,'WE'],['Legs',5,'FR']].forEach(function(w){var s=lp(fdow(w[1])+'T'+cfg.wt);ev.push({t:'Workout: '+w[0],d:plan[w[0]][2].map(function(r){return r[0]+' '+r[1]}).join('; '),s:lf(s),e:lf(new Date(+s+36e5)),r:'FREQ=WEEKLY;BYDAY='+w[2]+';UNTIL='+df(new Date(S+(N-2)*864e5))+'T165959Z',a:[30]})});
   return ev}
 function esc(s){return String(s||'').replace(/\r/g,'').replace(/[\\;,]/g,'\\$&').replace(/\n/g,'\\n')}
 function ics(){
-  var L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Life Architect//EN','CALSCALE:GREGORIAN','X-WR-CALNAME:Year 2 Medical Student','X-WR-TIMEZONE:Asia/Bangkok','BEGIN:VTIMEZONE','TZID:Asia/Bangkok','BEGIN:STANDARD','DTSTART:19700101T000000','TZOFFSETFROM:+0700','TZOFFSETTO:+0700','TZNAME:ICT','END:STANDARD','END:VTIMEZONE'];
+  var L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Life Architect//EN','CALSCALE:GREGORIAN','X-WR-CALNAME:'+(Y2()?'Year 2 Medical Student':'Life Architect'),'X-WR-TIMEZONE:Asia/Bangkok','BEGIN:VTIMEZONE','TZID:Asia/Bangkok','BEGIN:STANDARD','DTSTART:19700101T000000','TZOFFSETFROM:+0700','TZOFFSETTO:+0700','TZNAME:ICT','END:STANDARD','END:VTIMEZONE'];
   events().forEach(function(v,i){
     L.push('BEGIN:VEVENT','UID:la-'+i+'-'+v.s+'@life-architect','DTSTAMP:'+lf(new Date())+'Z',v.ad?'DTSTART;VALUE=DATE:'+v.s:'DTSTART;TZID=Asia/Bangkok:'+v.s,v.ad?'DTEND;VALUE=DATE:'+v.e:'DTEND;TZID=Asia/Bangkok:'+v.e,'SUMMARY:'+esc(v.t));
     if(v.d)L.push('DESCRIPTION:'+esc(v.d));
@@ -1610,7 +1748,7 @@ function view(v){PANELS.forEach(function(k){$('v-'+k).style.display=k===v?'flex'
   [].forEach.call(mt.children,function(b){var v=b.dataset.v,pn=$('v-'+v);b.id='tab-'+v;b.setAttribute('aria-controls','v-'+v);
     if(pn){pn.setAttribute('role','tabpanel');pn.setAttribute('aria-labelledby','tab-'+v)}
     b.tabIndex=b.getAttribute('aria-selected')==='true'?0:-1});
-  mt.addEventListener('keydown',function(e){var t=[].slice.call(mt.children),i=t.indexOf(document.activeElement);if(i<0)return;
+  mt.addEventListener('keydown',function(e){var t=[].slice.call(mt.children).filter(function(b){return !b.hidden}),i=t.indexOf(document.activeElement);if(i<0)return;
     var n=e.key==='ArrowRight'?i+1:e.key==='ArrowLeft'?i-1:e.key==='Home'?0:e.key==='End'?t.length-1:null;if(n===null)return;
     e.preventDefault();n=(n+t.length)%t.length;t[n].focus();t[n].click()})})();
 
@@ -1631,13 +1769,16 @@ root.addEventListener('keydown',function(e){if(e.key==='Escape'&&!drw.hidden)ope
 /* ---------- today telemetry ---------- */
 function agenda(){try{
   var now=new Date(),dw=now.getDay(),td=ymd(now),wk={1:'Push',3:'Pull',5:'Legs'}[dw],tl=wk?wk+' day':'Rest day';
-  if(wk&&blocks.some(function(b){return b[0]===4&&/%/.test(b[3])&&td>=b[1]&&td<=b[2]}))tl+=' · 70%';
+  if(Y2()&&wk&&blocks.some(function(b){return b[0]===4&&/%/.test(b[3])&&td>=b[1]&&td<=b[2]}))tl+=' · 70%';
   var cur=blocks.filter(function(b){return b[0]<4&&td>=b[1]&&td<=b[2]}).map(function(b){return b[3]});
   var hr=now.getHours();if($('greet'))$('greet').textContent=hr<5?'Still up':hr<12?'Good morning':hr<18?'Good afternoon':'Good evening';$('t-date').textContent=WD[dw]+' '+now.getDate()+' '+MN[now.getMonth()];
-  $('t-train').textContent=tl;$('t-block').textContent=cur.length?cur.join(' · '):'No study block today';
+  var tb=blkOn(td);$('t-train').textContent=tl;$('t-block').textContent=Y2()?(cur.length?cur.join(' · '):'No study block today'):(tb.length?tb.length+(tb.length===1?' block':' blocks')+' planned':'Nothing planned yet');
   var h=dpct(td,GRP[0]),st=dpct(td,GRP[1]),all=dayScore(td);
   $('t-daily').textContent=Math.round(all*100)+'%';$('t-dsub').textContent='Health '+Math.round(h*100)+'% · Study '+Math.round(st*100)+'%';
   $('t-meter').style.width=Math.round(all*100)+'%';
+  $('t-exlbl').textContent=Y2()?'Next exam':'Planned today';
+  if(!Y2()){var mins=0,hmN=p2(now.getHours())+':'+p2(now.getMinutes()),nb=null;tb.forEach(function(b){mins+=tm(b.e)-tm(b.s);if(!nb&&b.e>hmN)nb=b});
+    $('t-exam').textContent=mins?(Math.floor(mins/60)?Math.floor(mins/60)+'h':'')+(mins%60?(Math.floor(mins/60)?' ':'')+mins%60+'m':''):'0h';$('t-exname').textContent=nb?(nb.s<=hmN?'Now: ':'Next: '+nb.s+' ')+nb.title:tb.length?'All done for today':'Tap a slot in Calendar to plan';return}
   var nx=null;for(var i=0;i<exams.length;i++){if(new Date(exams[i][1])>now){nx=exams[i];break}}
   if(nx){var ms=new Date(nx[1])-now;$('t-exam').textContent=Math.floor(ms/864e5)+'d '+(Math.floor(ms/36e5)%24)+'h';$('t-exname').textContent=nx[0]+' · '+nx[2]}
   else{$('t-exam').textContent='Done';$('t-exname').textContent='No upcoming exams'}
@@ -1773,7 +1914,12 @@ function weekView(){
   var e=new Date(mon);e.setDate(mon.getDate()+6);
   $('wk-lbl').textContent=(WKO===0?'This week · ':WKO===1?'Next week · ':WKO===-1?'Last week · ':'')+mon.getDate()+' '+MN[mon.getMonth()]+' – '+e.getDate()+' '+MN[e.getMonth()];
   var a=ymd(mon);$('wk-ban').innerHTML=banner(spans(a,ymd(e)));$('wk-days').innerHTML=h}
+function blkOn(k){return (typeof BL==='undefined'||!BL?[]:BL).filter(function(b){return b.date===k}).sort(function(a,b){return a.s<b.s?-1:1})}
+function blkRow(b,withDate){return '<div class="ev2"><time>'+(withDate?shortD(b.date)+' · ':'')+b.s+'–'+b.e+'</time><b>'+esc2(b.title)+'</b>'+(b.course&&b.course!=='Personal'?'<small>'+esc2(b.course)+'</small>':'')+'</div>'}
 function todayPanel(){
+  if(!Y2()){var k0=ymd(new Date()),t0=blkOn(k0),up0=(BL||[]).filter(function(b){return b.date>k0}).sort(function(a,b){return a.date+a.s<b.date+b.s?-1:1}).slice(0,4);
+    $('ov-today').innerHTML=t0.length?t0.map(function(b){return blkRow(b)}).join(''):'<p class="none">Nothing planned today.</p><p class="sub" style="margin-top:4px">Open the calendar and tap a time slot to plan a block.</p>';
+    $('ov-exams').innerHTML=up0.length?up0.map(function(b){return blkRow(b,true)}).join(''):'<p class="none">Nothing planned for the days ahead.</p>';return}
   var T=new Date(),k=ymd(T),ev=onDay(k),h;
   if(ev.length)h=ev.map(evRow).join('');
   else{var nk=null;for(var i=1;i<30&&!nk;i++){var d=new Date(T);d.setDate(T.getDate()+i);if(onDay(ymd(d)).some(function(c){return c[1]}))nk=d}
@@ -1852,7 +1998,14 @@ year();
 var CC={'HGB-1':'#2563EB','HRP-1':'#DB2777','HRU-1':'#D97706','HNS-1':'#7C3AED','HGA':'#0D9488','PMLI-1':'#64748B','BHCB':'#0EA5E9','EHP':'#4F46E5','HIM':'#059669','HMS-1':'#65A30D','HCVS-1':'#EA580C','HEN-1':'#CA8A04','HRS-1':'#0891B2','MHI':'#9333EA','PHI':'#16A34A','BAP':'#B45309','BCP':'#0284C7','PBL':'#475569','Personal':'#18181B'};
 var CV={view:'week',date:new Date(),filter:null};
 var CM=st.g('la_calmode')==='y2'?'y2':'personal';function Y2(){return CM==='y2'}
-function setMode(m){CM=m==='y2'?'y2':'personal';st.s('la_calmode',CM);if(!Y2())CV.filter=null;if($('set-y2'))$('set-y2').checked=Y2();calRender()}
+function setMode(m){CM=m==='y2'?'y2':'personal';st.s('la_calmode',CM);if(!Y2())CV.filter=null;if($('set-y2'))$('set-y2').checked=Y2();applyMode();calRender()}
+/* the Year 2 package switches on the Study page, exams and lecture progress; without it the app is a personal planner */
+function applyMode(){var y=Y2(),tb=$('tab-main');if(tb)tb.hidden=!y;if(!y&&$('v-main').style.display!=='none')view('overview');
+  $('ov-subj-sec').hidden=!y;$('ov-row3').classList.toggle('two',!y);
+  $('ov-today-h').textContent=y?'Today’s classes':'Today’s plan';$('ov-today-s').textContent=y?'From the Year 2 calendar':'Blocks you planned for today';
+  $('ov-ex-h').textContent=y?'Upcoming exams':'Coming up';$('ov-ex-s').textContent=y?'The next four':'Your next planned blocks';
+  $('k-ex-l').hidden=!y;$('c-single').hidden=!y;$('bk-title').placeholder=y?'e.g. HGB-1 review: L5 GI secretion':'e.g. Review chapter 5';
+  try{agenda();dash(true);list()}catch(e){}}
 try{var cvs=st.g('la_calview');if(cvs==='year'||cvs==='month'||cvs==='week')CV.view=cvs}catch(e){}
 CV.date.setHours(0,0,0,0);
 function cAdd(d,n){var x=new Date(d);x.setDate(x.getDate()+n);return x}
@@ -2066,16 +2219,232 @@ $('g-dis').onclick=function(){if(GS.tok&&window.google&&google.accounts&&google.
 $('g-origin').textContent=location.origin&&location.origin!=='null'?location.origin:'(your website address)';gUI();
 if(st.g('la_gcid'))setTimeout(function(){gLoad(function(){})},1500);
 /* deep links into the calendar */
-$('ov-exams').addEventListener('click',function(e){var li=e.target.closest('[data-date]');if(li){CV.view='week';CV.date=new Date(li.dataset.date+'T00:00:00');CM='y2';st.s('la_calmode','y2');if($('set-y2'))$('set-y2').checked=true;view('cal')}});
+$('ov-exams').addEventListener('click',function(e){var li=e.target.closest('[data-date]');if(li){CV.view='week';CV.date=new Date(li.dataset.date+'T00:00:00');CM='y2';st.s('la_calmode','y2');if($('set-y2'))$('set-y2').checked=true;applyMode();view('cal')}});
 $('ov-open-cal').onclick=function(){CV.view='week';CV.date=new Date();CV.date.setHours(0,0,0,0);view('cal')};
 
+
+/* ---------- accounts and sync (Supabase). Local-first: the page always reads and writes this browser, then mirrors
+   every la_ key to the signed-in user's rows in public.user_data. Row-level security keeps each account's rows
+   private. Only the publishable key belongs in the page; a secret key is refused. ---------- */
+var ACC=(function(){
+  var W=document.querySelector('.la-widget'),C=window.LA_CONFIG||{},SU=String(C.supabaseUrl||'').trim().replace(/\/+$/,''),SK=String(C.supabaseKey||'').trim(),secret=false;
+  function jwtRole(k){try{return JSON.parse(atob(k.split('.')[1].replace(/-/g,'+').replace(/_/g,'/'))).role||''}catch(e){return ''}}
+  if(/^sb_secret_/.test(SK)||(/^eyJ/.test(SK)&&jwtRole(SK)==='service_role')){secret=true;SK='';try{console.error('Life Architect: a SECRET Supabase key was placed in the page. Remove it, rotate it in Supabase, and use the publishable key instead.')}catch(e){}}
+  var OK=/^https:\/\/[A-Za-z0-9.-]+(:\d+)?$/.test(SU)&&/^(sb_publishable_[A-Za-z0-9_-]{8,}|eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+)$/.test(SK);
+  var CDN='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js',SRI='sha384-TcHRA3zBbn+Lexh5n+Oil4guNPOS3rjNDpGRAN46u/s/mB2IZ50ceC6TYDU2yvgK';
+  var sb=null,loading=null,user=null,state='signin',isReady=false,booted=false,queue=[],canClose=false,sent={to:'',kind:''},online=true,lastSync=0,syncErr='',flushT=null,flushing=false,pulling=false,selfOut=false,away=false,pendRows=null,pendUser=null,coolT=null,toastT=null,linkErr='';
+  var TXT={signin:['Welcome back','Sign in to pick up where you left off.','Sign in'],
+    signup:['Create your account','It’s free and takes a minute. Your profile comes next.','Create account'],
+    forgot:['Reset your password','Enter your email and we’ll send you a link to choose a new one.','Send reset link'],
+    newpw:['Choose a new password','Use at least 8 characters. You’ll stay signed in on this device.','Save password'],
+    sent:['Check your inbox',''],busy:['Getting your data','This takes a moment the first time on a device.'],
+    merge:['This device already has data','It was saved here before you signed in, and your account has data too. Choose what happens to the data on this device.']};
+  function nKeys(o){return Object.keys(o).length}
+  function saveDirty(){LX.s('lax_dirty',JSON.stringify(DIRTY))}
+  function localKeys(){var o=[],i,k;try{for(i=0;i<localStorage.length;i++){k=localStorage.key(i);if(SYK.test(k)&&!SYSKIP[k])o.push(k)}}catch(e){}return o}
+  function wipeLocal(){var o=[],i,k;try{for(i=0;i<localStorage.length;i++){k=localStorage.key(i);if(k.indexOf('la_')===0)o.push(k)}o.forEach(function(x){localStorage.removeItem(x)})}catch(e){}}
+  function rowOK(r){return r&&typeof r.key==='string'&&SYK.test(r.key)&&!SYSKIP[r.key]&&typeof r.value==='string'&&r.value.length<=5e5}
+  function redir(){return location.origin+location.pathname}
+  function quiet(){var a=document.activeElement,typing=a&&W.contains(a)&&/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName);
+    return !typing&&$('auth').hidden&&$('v-set').hidden&&['bk-dlg','pf-dlg','gd-dlg'].every(function(i){return $(i).hidden})&&!(typeof TOUR!=='undefined'&&TOUR.active())}
+  function note(m){var t=$('acc-toast');t.textContent=m;t.hidden=false;clearTimeout(toastT);toastT=setTimeout(function(){t.hidden=true},3200)}
+
+  /* ---- gate ---- */
+  function inert(on){[W.querySelector('.rail-col'),W.querySelector('main')].forEach(function(e){if(!e)return;if(on)e.setAttribute('inert','');else e.removeAttribute('inert')})}
+  function alertMsg(m,kind){var a=$('auth-alert');a.textContent=m||'';a.className='auth-alert'+(kind==='info'?' info':'');a.hidden=!m}
+  function setBusy(b){var g=$('auth-go');g.disabled=b||!OK;g.classList.toggle('load',!!b);g.setAttribute('aria-busy',String(!!b))}
+  function render(){var S=state,t=TXT[S]||TXT.signin,form=S==='signin'||S==='signup'||S==='forgot'||S==='newpw';
+    $('auth-h').textContent=t[0];
+    $('auth-sub').textContent=S==='sent'?(sent.kind==='reset'?'If '+sent.to+' has an account, a reset link is on its way. Open it to choose a new password.':'We sent a confirmation link to '+sent.to+'. Open it to finish creating your account.'):t[1];
+    $('auth-form').hidden=!form;$('auth-email-l').hidden=S==='newpw';$('auth-pw-l').hidden=S==='forgot';
+    $('auth-pw').setAttribute('autocomplete',S==='signin'?'current-password':'new-password');$('auth-pw-t').textContent=S==='newpw'?'New password':'Password';
+    $('auth-meter').hidden=!(S==='signup'||S==='newpw');meter();
+    $('auth-go').textContent=t[2]||'';$('auth-forgot').hidden=S!=='signin';
+    $('auth-sw').hidden=!(S==='signin'||S==='signup');$('auth-sw-t').textContent=S==='signup'?'Already have an account?':'New here?';$('auth-sw-b').textContent=S==='signup'?'Sign in':'Create an account';
+    $('auth-back').hidden=!(S==='forgot'||S==='sent');$('auth-row').hidden=S==='busy'||S==='merge'||S==='newpw';
+    $('auth-sent').hidden=S!=='sent';$('auth-merge').hidden=S!=='merge';$('auth-spin').hidden=S!=='busy';
+    var g=(S==='signin'||S==='signup')&&!canClose;$('auth-guest').hidden=$('auth-fine').hidden=!g;$('auth-or').hidden=!g||!OK;
+    $('auth-guest').className=OK?'ghost':'btn';$('auth-guest').textContent=OK?'Continue without an account':'Continue on this device';
+    $('auth-x').hidden=!canClose;
+    ['auth-email','auth-pw','auth-forgot','auth-sw-b','auth-eye'].forEach(function(i){$(i).disabled=!OK});
+    if(!OK&&form)alertMsg(secret?'A secret key was found in this page’s settings. Remove it and use the publishable key. Accounts stay off until then.':'Accounts aren’t connected on this site yet. You can still use everything on this device.','info');
+    setBusy(false)}
+  function showGate(s,o){state=s;canClose=!!(o&&o.close);alertMsg('');$('auth').hidden=false;inert(true);render();
+    setTimeout(function(){try{var f=s==='newpw'?$('auth-pw'):(s==='signin'||s==='signup'||s==='forgot')&&OK?$('auth-email'):$('auth-h');f.focus({preventScroll:true})}catch(e){}},40)}
+  function hideGate(){$('auth').hidden=true;inert(false);$('auth-pw').value=''}
+  function ready(){hideGate();if(!isReady){isReady=true;queue.splice(0).forEach(function(f){try{f()}catch(e){}})}}
+  function meter(){var v=$('auth-pw').value,n=v.length,kinds=(/[a-z]/.test(v)?1:0)+(/[A-Z]/.test(v)?1:0)+(/\d/.test(v)?1:0)+(/[^A-Za-z0-9]/.test(v)?1:0),s=!n?0:n<8?1:(n>=12&&kinds>=3)||n>=16?3:2;
+    $('auth-meter').setAttribute('data-s',s);$('auth-pw-hint').textContent=['At least 8 characters','Too short','Good','Strong'][s]}
+  function cool(){var b=$('auth-resend'),n=60;clearInterval(coolT);b.disabled=true;b.textContent='Send it again in '+n+'s';
+    coolT=setInterval(function(){n--;if(n<=0){clearInterval(coolT);b.disabled=false;b.textContent='Send it again'}else b.textContent='Send it again in '+n+'s'},1000)}
+  function why(e){var c=(e&&e.code)||'',m=String((e&&e.message)||''),st_=e&&e.status;
+    if(e&&e.name==='LoadError'||/failed to fetch|networkerror|load failed|network request failed/i.test(m))return 'Can’t reach the sign-in service. Check your connection, then try again.';
+    if(c==='invalid_credentials'||/invalid login credentials/i.test(m))return 'That email and password don’t match. Try again, or reset your password.';
+    if(c==='user_already_exists'||c==='email_exists'||/already registered/i.test(m))return 'This email already has an account. Sign in, or reset your password.';
+    if(c==='weak_password'||/password should be/i.test(m))return 'Choose a stronger password with at least 8 characters.';
+    if(c==='same_password')return 'That’s your current password. Pick a different one.';
+    if(c==='over_email_send_rate_limit'||/email rate limit/i.test(m))return 'Too many emails were sent just now. Wait a few minutes, then try again.';
+    if(c==='over_request_rate_limit'||st_===429)return 'Too many attempts. Wait a minute, then try again.';
+    if(c==='signup_disabled'||/signups not allowed/i.test(m))return 'New sign-ups are turned off for this site.';
+    if(c==='email_address_invalid'||c==='validation_failed')return 'That email address wasn’t accepted. Check it and try again.';
+    if(c==='session_not_found'||c==='session_expired'||/auth session missing/i.test(m))return 'Your sign-in link has expired. Request a new one.';
+    if(c==='PGRST205'||c==='42P01')return 'The database isn’t set up yet. Run the SQL from the setup guide in Supabase, then sign in again.';
+    if(c==='42501'||st_===403)return 'The database refused the request. Check the row-level security policies from the setup guide.';
+    try{console.warn('Life Architect account error:',c,m)}catch(x){}
+    return 'Something went wrong. Try again in a moment.'}
+
+  /* ---- client ---- */
+  function client(){if(sb)return Promise.resolve(sb);if(!OK)return Promise.reject(new Error('Accounts are not configured'));if(loading)return loading;
+    loading=new Promise(function(res,rej){
+      function mk(){try{sb=window.supabase.createClient(SU,SK,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+        sb.auth.onAuthStateChange(function(ev,s){setTimeout(function(){onAuth(ev,s)},0)});res(sb)}catch(e){loading=null;rej(e)}}
+      if(window.supabase&&window.supabase.createClient)return mk();
+      var s=document.createElement('script');s.src=CDN;s.integrity=SRI;s.crossOrigin='anonymous';s.referrerPolicy='no-referrer';s.onload=mk;
+      s.onerror=function(){loading=null;s.remove();var e=new Error('load');e.name='LoadError';rej(e)};document.head.appendChild(s)});
+    return loading}
+  function onAuth(ev,s){
+    if(ev==='PASSWORD_RECOVERY'){try{sessionStorage.setItem('lax_recov','1')}catch(e){}if(isReady&&user)showGate('newpw',{close:true});return}
+    if(ev==='SIGNED_IN'&&s&&s.user&&!user&&booted)signedIn(s.user);
+    if(ev==='SIGNED_OUT'&&user&&!selfOut){user=null;ui();showGate('signin');alertMsg('Your session ended. Sign in again to keep syncing.','info')}}
+
+  /* ---- sign-in flow ---- */
+  function settle(){ready();ui();var rc=false;try{rc=sessionStorage.getItem('lax_recov')==='1'}catch(e){}if(rc)showGate('newpw',{close:true})}
+  function signedIn(u){if(!u||(user&&user.id===u.id))return;user=u;away=false;online=true;LX.s('lax_mode','user');var owner=LX.g('lax_uid');
+    if(owner===u.id){settle();sync();return}
+    showGate('busy');initial(u,owner)}
+  function initial(u,owner){fetchAll(null).then(function(rows){
+      var foreign=!!owner&&owner!==u.id,guestData=!owner&&!!LX.g('la_profile');
+      if(rows.length&&guestData){pendRows=rows;pendUser=u;showGate('merge');return}
+      adopt(u,rows,rows.length||foreign?'replace':'push')
+    }).catch(function(e){var m=why(e);user=null;selfOut=true;var p=sb?sb.auth.signOut({scope:'local'}):Promise.resolve();
+      p.catch(function(){}).then(function(){selfOut=false;showGate('signin');alertMsg(m)})})}
+  function adopt(u,rows,how){var rk={},mx='';
+    if(how==='replace')wipeLocal();
+    rows.forEach(function(r){if(r.updated_at>mx)mx=r.updated_at;if(rowOK(r)){rk[r.key]=1;LX.s(r.key,r.value)}});
+    DIRTY={};if(how!=='replace')localKeys().forEach(function(k){if(!rk[k])DIRTY[k]=Date.now()});
+    saveDirty();OWN=u.id;LX.s('lax_uid',u.id);LX.s('lax_cursor',mx);pendRows=pendUser=null;
+    if(how==='push'){flush().then(function(){settle()});return}
+    st.frozen=true;flush().then(function(){location.reload()})}
+  function guest(){LX.s('lax_mode','guest');ready();ui()}
+  function submit(){if(!OK||$('auth-go').classList.contains('load'))return;var S=state,em=$('auth-email').value.trim().toLowerCase(),pw=$('auth-pw').value;alertMsg('');
+    if(S!=='newpw'&&(em.length>254||!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(em))){alertMsg('Enter a valid email address.');$('auth-email').focus();return}
+    if(S==='signin'&&!pw){alertMsg('Enter your password.');$('auth-pw').focus();return}
+    if((S==='signup'||S==='newpw')&&pw.length<8){alertMsg('Use at least 8 characters for your password.');$('auth-pw').focus();return}
+    setBusy(true);
+    client().then(function(){
+      if(S==='signin')return sb.auth.signInWithPassword({email:em,password:pw}).then(function(r){if(r.error)throw r.error;signedIn(r.data.user)});
+      if(S==='signup')return sb.auth.signUp({email:em,password:pw,options:{emailRedirectTo:redir()}}).then(function(r){if(r.error)throw r.error;var u=r.data.user;
+        if(r.data.session&&u){signedIn(u);return}
+        if(u&&u.identities&&!u.identities.length){state='signin';render();alertMsg('This email already has an account. Sign in, or reset your password.');return}
+        sent={to:em,kind:'confirm'};state='sent';render();cool()});
+      if(S==='forgot')return sb.auth.resetPasswordForEmail(em,{redirectTo:redir()}).then(function(r){if(r.error)throw r.error;sent={to:em,kind:'reset'};state='sent';render();cool()});
+      return sb.auth.updateUser({password:pw}).then(function(r){if(r.error)throw r.error;try{sessionStorage.removeItem('lax_recov')}catch(e){}hideGate();note('Password updated.')})
+    }).catch(function(e){setBusy(false);
+      if(e&&(e.code==='email_not_confirmed'||/not confirmed/i.test(e.message||''))){sent={to:em,kind:'confirm'};state='sent';render();alertMsg('Confirm your email before signing in. We can send the link again.','info');return}
+      alertMsg(why(e))})}
+  function resend(){alertMsg('');$('auth-resend').disabled=true;client().then(function(){return sent.kind==='reset'?sb.auth.resetPasswordForEmail(sent.to,{redirectTo:redir()}):sb.auth.resend({type:'signup',email:sent.to,options:{emailRedirectTo:redir()}})})
+    .then(function(r){if(r&&r.error)throw r.error;alertMsg('Sent. It can take a minute to arrive. Check spam too.','info');cool()}).catch(function(e){$('auth-resend').disabled=false;alertMsg(why(e))})}
+  function wipeAll(){st.frozen=true;wipeLocal();['lax_uid','lax_cursor','lax_dirty','lax_mode'].forEach(LX.d);DIRTY={};OWN=null;location.reload()}
+  function signOut(){flush().then(function(){var n=nKeys(DIRTY);
+    if(n&&!confirm(n+(n===1?' change hasn’t':' changes haven’t')+' reached your account yet. Sign out anyway and lose '+(n===1?'it':'them')+'?'))return;
+    selfOut=true;var p=sb?sb.auth.signOut({scope:'local'}):Promise.resolve();p.catch(function(){}).then(wipeAll)})}
+  function del(){if(!confirm(user?'Delete everything saved to your account and on this device? This can’t be undone.':'Delete everything saved on this device? This can’t be undone.'))return;
+    if(!user||!sb){wipeAll();return}
+    if(!confirm('Last check. This removes every logged day, scan and plan for good.'))return;
+    sb.from('user_data').delete().eq('user_id',user.id).then(function(r){if(r.error)throw r.error;selfOut=true;return sb.auth.signOut({scope:'local'})}).then(wipeAll,function(e){alert(why(e))})}
+
+  /* ---- sync ---- */
+  function fetchAll(since){var out=[],size=1000;
+    function page(from){var q=sb.from('user_data').select('key,value,updated_at').eq('user_id',user.id).order('updated_at',{ascending:true}).order('key',{ascending:true}).range(from,from+size-1);
+      if(since)q=q.gte('updated_at',since);
+      return q.then(function(r){if(r.error)throw r.error;var d=r.data||[];out=out.concat(d);if(d.length===size&&from<300000)return page(from+size);return out})}
+    return page(0)}
+  function netErr(e){var m=String((e&&e.message)||'');if(/failed to fetch|networkerror|load failed|network request failed/i.test(m)||navigator.onLine===false){online=false;syncErr=''}else{online=true;syncErr=why(e)}ui()}
+  function pull(){if(!sb||!user||pulling||OWN!==user.id)return Promise.resolve(0);pulling=true;var cur=LX.g('lax_cursor')||null;
+    return fetchAll(cur).then(function(rows){var n=0,mx=cur||'';
+      rows.forEach(function(r){if(r.updated_at>mx)mx=r.updated_at;if(!rowOK(r))return;var d=DIRTY[r.key];
+        if(d&&d>Date.parse(r.updated_at))return;
+        if(d)delete DIRTY[r.key];
+        if(LX.g(r.key)!==r.value){LX.s(r.key,r.value);n++}});
+      saveDirty();if(mx)LX.s('lax_cursor',mx);pulling=false;online=true;syncErr='';lastSync=Date.now();ui();
+      if(n){st.frozen=true;note('Updating from your account…');setTimeout(function(){location.reload()},500)}
+      return n}).catch(function(e){pulling=false;netErr(e);return 0})}
+  function flush(){if(!sb||!user||flushing||OWN!==user.id||st.hold)return Promise.resolve();
+    var ks=Object.keys(DIRTY);if(!ks.length){ui();return Promise.resolve()}
+    flushing=true;ui();var batch=ks.slice(0,200),snap={},rows=[];
+    batch.forEach(function(k){snap[k]=DIRTY[k];var v=LX.g(k);if(v!=null&&v.length<=5e5)rows.push({user_id:user.id,key:k,value:v})});
+    var req=rows.length?sb.from('user_data').upsert(rows,{onConflict:'user_id,key'}):Promise.resolve({error:null});
+    return req.then(function(r){flushing=false;if(r.error)throw r.error;
+      batch.forEach(function(k){if(DIRTY[k]===snap[k])delete DIRTY[k]});saveDirty();online=true;syncErr='';lastSync=Date.now();ui();
+      if(nKeys(DIRTY))return flush()}).catch(function(e){flushing=false;netErr(e)})}
+  function sync(){if(!user||!sb)return Promise.resolve();return (quiet()?pull():Promise.resolve(0)).then(function(n){if(!n)return flush()})}
+  st.kick=function(){if(!user)return;clearTimeout(flushT);flushT=setTimeout(flush,1500);ui()};
+
+  /* ---- account UI ---- */
+  function ui(){var s=!!user,n=nKeys(DIRTY),em=s?String(user.email||'').slice(0,120):'',msg,t;
+    $('ac-email').textContent=s?em:away?'Signed in':'Not signed in';$('ac-ava').textContent=s?(em.charAt(0)||'·').toUpperCase():'·';
+    if(!OK)msg='Accounts aren’t connected on this site yet. Your data is saved in this browser only.';
+    else if(away&&!s)msg='Offline. Changes will sync when you’re back online.';
+    else if(!s)msg='Your data is saved in this browser only. Create an account to keep it safe and use it on other devices.';
+    else if(syncErr)msg=syncErr;
+    else if(!online)msg='Offline. '+(n?n+(n===1?' change':' changes')+' will sync when you’re back online.':'Changes will sync when you’re back online.');
+    else if(flushing||n)msg='Saving '+(n||'')+(n===1?' change':' changes')+'…';
+    else{t=lastSync?new Date(lastSync):null;msg='Everything is saved to your account'+(t?' · '+p2(t.getHours())+':'+p2(t.getMinutes()):'')+'.'}
+    $('ac-stat').textContent=msg;$('ac-in').hidden=s||away||!OK;$('ac-sync').hidden=$('ac-pw').hidden=$('ac-out').hidden=!s;
+    $('ac-del-note').textContent=s?'Removes everything saved to your account and on this device. This can’t be undone.':'Removes everything saved on this device. This can’t be undone.';
+    if(s)W.setAttribute('data-sync',syncErr?'err':!online?'off':(flushing||n)?'pend':'ok');else if(away)W.setAttribute('data-sync','off');else W.removeAttribute('data-sync');
+    $('data-note').textContent=s?'Your data is saved to your account and syncs between your devices. A backup file is still useful if you want your own copy.':'Everything lives in this browser on this device. Back up once a week and keep the file in iCloud Drive or Google Drive.';
+    try{bkUI()}catch(e){}}
+  function resume(){client().then(function(){return sb.auth.getSession()}).then(function(r){var s=r&&r.data&&r.data.session;
+      if(s&&s.user)signedIn(s.user);else if(!user){away=false;ui();showGate('signin');alertMsg('Your session ended. Sign in again to keep syncing.','info')}}).catch(function(){})}
+  function bind(){
+    $('auth-form').addEventListener('submit',function(e){e.preventDefault();submit()});
+    $('auth-sw-b').onclick=function(){state=state==='signup'?'signin':'signup';alertMsg('');render();$('auth-email').focus()};
+    $('auth-forgot').onclick=function(){state='forgot';alertMsg('');render();$('auth-email').focus()};
+    $('auth-back').onclick=function(){clearInterval(coolT);state='signin';alertMsg('');render();$('auth-email').focus()};
+    $('auth-eye').onclick=function(){var p=$('auth-pw'),on=p.type==='password';p.type=on?'text':'password';this.textContent=on?'Hide':'Show';this.setAttribute('aria-pressed',String(on));this.setAttribute('aria-label',on?'Hide password':'Show password')};
+    $('auth-pw').addEventListener('input',meter);
+    $('auth-guest').onclick=guest;$('auth-resend').onclick=resend;
+    $('auth-x').onclick=function(){if(canClose)hideGate()};
+    $('auth').addEventListener('keydown',function(e){if(e.key==='Escape'&&canClose){e.preventDefault();e.stopPropagation();hideGate()}});
+    $('auth-m-add').onclick=function(){if(pendUser){showGate('busy');adopt(pendUser,pendRows,'merge')}};
+    $('auth-m-drop').onclick=function(){if(pendUser){showGate('busy');adopt(pendUser,pendRows,'replace')}};
+    $('ac-in').onclick=function(){$('set-close').click();showGate('signup',{close:true})};
+    $('ac-pw').onclick=function(){$('set-close').click();showGate('newpw',{close:true})};
+    $('ac-out').onclick=signOut;$('ac-del').onclick=del;
+    $('ac-sync').onclick=function(){var b=this;b.disabled=true;(sb?pull().then(function(n){if(!n)return flush()}):Promise.resolve()).then(function(){b.disabled=false;if(!syncErr&&online)note('Everything is saved.')})};
+    document.addEventListener('visibilitychange',function(){if(!user)return;if(document.visibilityState==='hidden')flush();else sync()});
+    window.addEventListener('online',function(){if(user){online=true;sync()}else if(away)resume()});
+    window.addEventListener('offline',function(){online=false;ui()});
+    setInterval(function(){if(away&&!user&&navigator.onLine!==false){resume();return}if(user&&document.visibilityState!=='hidden'&&(nKeys(DIRTY)||Date.now()-lastSync>3e5))sync()},20000)}
+  function boot(){bind();ui();
+    var mode=LX.g('lax_mode'),tok=false,i,hp={};
+    try{for(i=0;i<localStorage.length;i++)if(/^sb-.+-auth-token$/.test(localStorage.key(i)))tok=true}catch(e){}
+    location.hash.replace(/^#/,'').split('&').forEach(function(p){var j=p.indexOf('=');if(j>0)hp[p.slice(0,j)]=p.slice(j+1)});
+    if(hp.type==='recovery')try{sessionStorage.setItem('lax_recov','1')}catch(e){}
+    if(hp.error_description||hp.error_code){linkErr=hp.error_code==='otp_expired'?'That link has expired or was already used. Request a new one below.':'That link didn’t work. Request a new one below.';
+      try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}}
+    var back=!!hp.access_token;
+    if(!OK){booted=true;if(mode==='guest')ready();else showGate('signin');return}
+    if(mode==='guest'&&!back&&!tok){booted=true;ready();return}
+    if(tok&&LX.g('lax_uid')&&!back&&!linkErr)ready();else{showGate(back||tok?'busy':'signin');if(linkErr)alertMsg(linkErr)}
+    client().then(function(){return sb.auth.getSession()}).then(function(r){booted=true;var s=r&&r.data&&r.data.session;
+      if(s&&s.user){signedIn(s.user);return}
+      if(LX.g('lax_uid')&&navigator.onLine===false){online=false;away=true;ready();ui();return}
+      if(mode==='guest'){ready();return}
+      var had=isReady&&!!LX.g('lax_uid');showGate('signin');if(linkErr)alertMsg(linkErr);else if(had)alertMsg('Your session ended. Sign in again to keep syncing.','info')
+    }).catch(function(){booted=true;if(LX.g('lax_uid')){online=false;away=true;ready();ui()}else if(mode==='guest')ready();else{showGate('signin');alertMsg('Can’t reach the sign-in service. Check your connection, then reload.')}})}
+  return {boot:boot,onReady:function(f){if(isReady)f();else queue.push(f)},signed:function(){return !!user},gate:function(){return !$('auth').hidden},open:showGate}})();
 
 /* ---------- rail ---------- */
 (function(){var r=$('rail'),t=$('rail-tg');function setR(o){r.classList.toggle('open',o);t.setAttribute('aria-expanded',String(o));t.setAttribute('aria-label',o?'Collapse menu':'Expand menu');st.s('la_rail',o?'1':'0')}
   setR(st.g('la_rail')==='1');t.onclick=function(){setR(!r.classList.contains('open'))}})();
-dash(true);
+applyMode();dash(true);
 
-tick();setInterval(tick,60000);
+tick();setInterval(tick,60000);ACC.boot();
 })();
 </script>
 </div>
+
+</body>
+</html>
